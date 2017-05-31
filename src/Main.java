@@ -12,12 +12,11 @@ public class Main {
 		
 		for(i = 0; i < 4; i++) jogadores[i] = new Jogador("Jogador " + i, i);
 		
-		baralho.baralho_trucoArrange();
-		
 		System.out.println("Comeco do jogo!\n");
 		
 		while(!placarJogo.alguemGanhou()){
 			
+			baralho.baralho_trucoArrange();
 			baralho.baralho_shuffle();
 			
 			System.out.println("\nRodada " + nroRodada + "!");
