@@ -5,10 +5,13 @@ public class Jogador {
 	private int nroJogador;
 	private Mao mao;
 	
-	public Jogador(String nome, int nroJogador, Mao mao) {
+	public Jogador(String nome, int nroJogador) {
 		this.nome = nome;
 		this.nroJogador = nroJogador;
-		this.mao = mao;
+	}
+	
+	public void receberCartasDaMao(Baralho baralho) {
+		this.mao = new Mao(baralho);
 	}
 	
 	//Getters and Setters
