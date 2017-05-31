@@ -42,19 +42,16 @@ public class Mao {
 		int cartaRetirada; //vai de 1 a 3
 		
 		while(true) {
-			System.out.printf("Cartas na sua mao: ");
+			System.out.printf("CARTAS NA MAO: ");
 			
 			printMao();
 			
-			System.out.println("\nCarta que deseja jogar (de 1 a 3):");
+			System.out.println("\nJOGAR CARTA (de 0 a 2):");
 		    cartaRetirada = EntradaTeclado.leInt();
 			
-		    if(cartasNaMao[cartaRetirada - 1].getValor() == -1) System.out.println("A carta ja foi retirada!\n");
-		    else {
-		    	Carta carta = cartasNaMao[cartaRetirada - 1];
-		    	//cartasNaMao[cartaRetirada - 1].setPeso(-1);
-		    	return carta;
-		    }
+		    Carta carta = cartasNaMao[cartaRetirada];
+		    
+		    return carta;
 		}
 	}
 	

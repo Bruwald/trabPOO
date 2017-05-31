@@ -64,7 +64,7 @@ public class Rodada {
 				if(maiorCartaDupla2.getPeso() == cartasJogadas[1].getPeso()){
 					qualJogadorGanhouPrimeiraJogada = 1;
 					return 1;
-				}else {
+				} else {
 					qualJogadorGanhouPrimeiraJogada = 3;
 					return 3;
 				}
