@@ -46,9 +46,13 @@ public class Rodada {
 				amarrouJogada1 = true;
 				placarRodada.incrementarPontosDupla1(1);
 				placarRodada.incrementarPontosDupla2(1);
-			}
-			else if(nroJogada == 2) amarrouJogada2 = true;
-			else if(nroJogada == 3) {
+			} else if(nroJogada == 2) {
+				if(!amarrouJogada1) {
+					if(qualJogadorGanhouPrimeiraJogada % 2 == 0) placarRodada.incrementarPontosDupla1(1);
+					if(qualJogadorGanhouPrimeiraJogada % 2 == 1) placarRodada.incrementarPontosDupla2(1);
+					amarrouJogada2 = true;
+				} else amarrouJogada2 = true;
+			} else if(nroJogada == 3) {
 				if(qualJogadorGanhouPrimeiraJogada % 2 == 0) placarRodada.incrementarPontosDupla1(1);
 				if(qualJogadorGanhouPrimeiraJogada % 2 == 1) placarRodada.incrementarPontosDupla2(1);
 				amarrouJogada3 = true;
