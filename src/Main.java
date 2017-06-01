@@ -27,8 +27,6 @@ public class Main {
 			manilha = new Carta(1, (cartaViradaNoCentro.getValor() + 1) % 13);
 			System.out.println("MANILHA: " + manilha.getValor());
 			
-			Rodada rodada = new Rodada(manilha);
-			
 			for(i = 0; i < nroJogadores; i++) {
 				jogadores[i].receberCartasDaMao(baralho);
 				jogadores[i].getMao().setPesoCartas(manilha);
@@ -39,25 +37,36 @@ public class Main {
 				jogadores[i].getMao().printMao();
 			}
 			
+			Rodada rodada = new Rodada(jogadores, manilha);
+			
 			while(!rodada.getPlacarRodada().alguemGanhou()){
 				
 				if(nroRodada == 1) quemComecouJogada = rodada.getQuemJoga();
 				else rodada.setQuemJoga(quemGanhouUltimaRodada);;
 			
-				while(quantosJogaram != 4) {
+				while(quantosJogaram < 4) {
 					System.out.println("\n\nVEZ DO " + jogadores[rodada.getQuemJoga()].getNome() + "\n");
-					cartasJogadas[rodada.getQuemJoga()] = jogadores[rodada.getQuemJoga()].getMao().jogarCarta();
+					cartasJogadas[rodada.getQuemJoga()] = jogadores[rodada.getQuemJoga()].getMao().jogarCarta(rodada);
+					if(rodada.getMudouJogador() == false) quantosJogaram++;
+					if(cartasJogadas[rodada.getQuemJoga()] != null) {
+						if(cartasJogadas[rodada.getQuemJoga()].getNaipe() == 50) {
+							rodada.setAcabouRodada(true);
+							quantosJogaram = 4;
+						}
+					}
 					rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
-					quantosJogaram++;
 				}
 				
-				System.out.println("\nQuem comecou a jogada: JOGADOR " + quemComecouJogada);
-				System.out.printf("Cartas jogadas: ");
-				for(i = 0; i < nroJogadores; i++) System.out.printf("%d ", cartasJogadas[i].getValor());
-				
-				rodada.setQuemJoga(rodada.qualJogadorGanhouOuAmarrouJogada(quemComecouJogada, cartasJogadas));
-				System.out.println("\nPlacar atual: " + rodada.getPlacarRodada().getPontosDupla1() + " x " + rodada.getPlacarRodada().getPontosDupla2());
-				System.out.println("Quem ganhou/amarrou a jogada: " + rodada.getQuemJoga());
+				if(rodada.getAcabouRodada() == false) {
+					System.out.println("\nQuem comecou a jogada: JOGADOR " + quemComecouJogada);
+					System.out.printf("Cartas jogadas: ");
+					for(i = 0; i < nroJogadores; i++) System.out.printf("%d ", cartasJogadas[i].getValor());
+					
+					rodada.setQuemJoga(rodada.qualJogadorGanhouOuAmarrouJogada(quemComecouJogada, cartasJogadas));
+					System.out.println("\nPlacar atual: " + rodada.getPlacarRodada().getPontosDupla1() + " x " + rodada.getPlacarRodada().getPontosDupla2());
+					System.out.println("Quem ganhou/amarrou a jogada: " + rodada.getQuemJoga());
+					
+				}
 				
 				quantosJogaram = 0;
 			}

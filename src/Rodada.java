@@ -1,3 +1,4 @@
+import java.io.IOException;
 
 public class Rodada {
 
@@ -5,22 +6,30 @@ public class Rodada {
 	private int nroJogada;
 	private int valorRodada;
 	private int quemJoga;
+	private int quemTrucou;
 	private int qualJogadorGanhouPrimeiraJogada;
 	private Placar placarRodada;
 	private boolean amarrouJogada1;
 	private boolean amarrouJogada2;
 	private boolean amarrouJogada3;
+	private boolean mudouJogador;
+	private boolean acabouRodada;
+	private Jogador[] jogadores;
 	
-	public Rodada(Carta manilha) {
+	public Rodada(Jogador[] jogadores, Carta manilha) {
 		this.manilha = manilha;
 		this.valorRodada = 1;
 		this.nroJogada = 1;
 		this.quemJoga = 0;
+		this.quemTrucou = -1;
 		this.qualJogadorGanhouPrimeiraJogada = -2;
 		this.placarRodada = new Placar(2);
 		this.amarrouJogada1 = false;
 		this.amarrouJogada2 = false;
 		this.amarrouJogada3 = false;
+		this.mudouJogador = false;
+		this.acabouRodada = false;
+		this.jogadores = jogadores;
 	}
 
 	public Carta comparaCartaDupla(Carta carta1, Carta carta2) {
@@ -104,6 +113,31 @@ public class Rodada {
 		
 	}
 	
+	public int jogadorAceitaEstadoDaAposta(Jogador jogador) throws IOException {
+		int resposta = 0;
+		
+		switch(getValorRodada()) {
+			case 3:
+				System.out.printf("\nAceita o truco " + jogador.getNome() + "? (0 - NAO, 1 - SIM, 2 - PEDIR 6) : ");
+				resposta = EntradaTeclado.leInt();
+				break;
+			case 6:
+				System.out.printf("\nAceita o pedido de 6 " + jogador.getNome() + "? (0 - NAO, 1 - SIM, 2 - PEDIR 9) : ");
+				resposta = EntradaTeclado.leInt();
+				break;
+			case 9:
+				System.out.printf("\nAceita o pedido de 9 " + jogador.getNome() + "? (0 - NAO, 1 - SIM, 2 - PEDIR 12) : ");
+				resposta = EntradaTeclado.leInt();
+				break;
+			case 12:
+				System.out.printf("\nAceita o pedido de 12 " + jogador.getNome() + "? (0 - NAO, 1 - SIM) : ");
+				resposta = EntradaTeclado.leInt();
+				break;
+		}
+		
+		return resposta;
+	}
+	
 	//Getters and Setters
 
 	public Carta getManilha() {
@@ -169,5 +203,39 @@ public class Rodada {
 	public void setPlacarRodada(Placar placarRodada) {
 		this.placarRodada = placarRodada;
 	}
+
+	public int getQuemTrucou() {
+		return quemTrucou;
+	}
+
+	public void setQuemTrucou(int quemTrucou) {
+		this.quemTrucou = quemTrucou;
+	}
+
+	public Jogador[] getJogadores() {
+		return jogadores;
+	}
+
+	public void setJogadores(Jogador[] jogadores) {
+		this.jogadores = jogadores;
+	}
+
+	public boolean getMudouJogador() {
+		return mudouJogador;
+	}
+
+	public void setMudouJogador(boolean mudouJogador) {
+		this.mudouJogador = mudouJogador;
+	}
+
+	public boolean getAcabouRodada() {
+		return acabouRodada;
+	}
+
+	public void setAcabouRodada(boolean acabouRodada) {
+		this.acabouRodada = acabouRodada;
+	}
+	
+	
 
 }

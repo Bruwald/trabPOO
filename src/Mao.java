@@ -38,20 +38,288 @@ public class Mao {
 		
 	}
 	
-	public Carta jogarCarta() throws IOException {
-		int cartaRetirada; //vai de 1 a 3
+	public Carta jogarCarta(Rodada rodada) throws IOException {
+		int cartaRetirada, cartaFechada, resposta, quemJoga;
 		
 		while(true) {
 			System.out.printf("CARTAS NA MAO: ");
-			
 			printMao();
 			
-			System.out.println("\nJOGAR CARTA (de 0 a 2):");
-		    cartaRetirada = EntradaTeclado.leInt();
-			
-		    Carta carta = cartasNaMao[cartaRetirada];
-		    
-		    return carta;
+			switch(rodada.getValorRodada()) {
+				case 1:
+					System.out.printf("\nDESEJA TRUCAR? (0 - NAO / 1 - SIM)");
+					resposta = EntradaTeclado.leInt();
+			    	if(resposta == 1) {
+			    		rodada.setQuemTrucou(rodada.getQuemJoga());
+			    		rodada.setValorRodada(3);
+			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
+			    		if(resposta == 0) {
+			    			rodada.setValorRodada(1);
+			    			quemJoga = rodada.getQuemJoga();
+			    			if(quemJoga % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla1(2);
+			    			else rodada.getPlacarRodada().incrementarPontosDupla2(2);
+			    			return new Carta(50,50);
+			    		} else if(resposta == 1) {
+			    			System.out.println("O jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " aceitou seu truco!");
+			    			
+			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+			    		    cartaRetirada = EntradaTeclado.leInt();
+			    		    
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    
+			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+			    		    
+			    		    Carta carta = cartasNaMao[cartaRetirada];
+			    		    
+			    		    return carta;
+			    		} else if(resposta == 2) {
+			    			rodada.setValorRodada(6);
+			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 6!");
+			    			resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
+			    			if(resposta == 0) {
+			    				rodada.setValorRodada(3);
+			    				if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla2(2);
+			    				else rodada.getPlacarRodada().incrementarPontosDupla1(2);
+			    				return new Carta(50,50);
+			    			} else if(resposta == 1) {
+			    				rodada.setMudouJogador(true);
+			    				return null;
+			    			} else if(resposta == 2) {
+			    				rodada.setValorRodada(9);
+			    				resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
+			    				if(resposta == 0) {
+			    					rodada.setValorRodada(6);
+					    			if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla1(2);
+					    			else rodada.getPlacarRodada().incrementarPontosDupla2(2);
+					    			return new Carta(50,50);
+			    				} else if (resposta == 1) {
+			    					System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " aceitou seu pedido de 9!");
+					    			
+					    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+					    		    cartaRetirada = EntradaTeclado.leInt();
+					    		    
+					    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+					    		    cartaFechada = EntradaTeclado.leInt();
+					    		    
+					    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+					    		    
+					    		    Carta carta = cartasNaMao[cartaRetirada];
+					    		    
+					    		    return carta;
+			    				} else if (resposta == 2) {
+			    					rodada.setValorRodada(12);
+			    					System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!");
+			    					resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
+			    					if(resposta == 0) {
+			    						rodada.setValorRodada(9);
+			    						if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla2(2);
+					    				else rodada.getPlacarRodada().incrementarPontosDupla1(2);
+					    				return new Carta(50,50);
+			    					} else if(resposta == 1) {
+			    						rodada.setMudouJogador(true);
+					    				return null;
+			    					}
+			    				}
+			    			}
+			    		}
+			    	} else if(resposta == 0) {
+			    		System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+		    		    cartaRetirada = EntradaTeclado.leInt();
+		    		    
+		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    
+		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+		    		    
+		    		    Carta carta = cartasNaMao[cartaRetirada];
+		    		    
+		    		    return carta;
+			    	}
+					break;
+				case 3:
+					System.out.printf("\nDESEJA PEDIR 6? (0 - NAO / 1 - SIM)");
+					resposta = EntradaTeclado.leInt();
+					if(resposta == 1) {
+						rodada.setValorRodada(6);
+			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
+			    		if(resposta == 0) {
+			    			rodada.setValorRodada(3);
+			    			if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla1(2);
+			    			else rodada.getPlacarRodada().incrementarPontosDupla2(2);
+			    			return new Carta(50,50);
+			    		} else if(resposta == 1) {
+			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " aceitou seu pedido de 6!");
+			    			
+			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+			    		    cartaRetirada = EntradaTeclado.leInt();
+			    		    
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    
+			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+			    		    
+			    		    Carta carta = cartasNaMao[cartaRetirada];
+			    		    
+			    		    return carta;
+			    		} else if(resposta == 2) {
+			    			rodada.setValorRodada(9);
+			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 9!");
+	    					resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
+	    					if(resposta == 0) {
+	    						rodada.setValorRodada(6);
+	    						if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla2(2);
+			    				else rodada.getPlacarRodada().incrementarPontosDupla1(2);
+			    				return new Carta(50,50);
+	    					} else if(resposta == 1) {
+	    						rodada.setMudouJogador(true);
+			    				return null;
+	    					} else if(resposta == 2) {
+	    						rodada.setValorRodada(12);
+	    						resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
+	    						if(resposta == 0) {
+	    							rodada.setValorRodada(9);
+	    							if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla1(2);
+				    				else rodada.getPlacarRodada().incrementarPontosDupla2(2);
+				    				return new Carta(50,50);
+	    						} else if(resposta == 1) {
+	    							System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " aceitou seu pedido de 12!");
+	    			    			
+	    			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+	    			    		    cartaRetirada = EntradaTeclado.leInt();
+	    			    		    
+	    			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+	    			    		    cartaFechada = EntradaTeclado.leInt();
+	    			    		    
+	    			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+	    			    		    
+	    			    		    Carta carta = cartasNaMao[cartaRetirada];
+	    			    		    
+	    			    		    return carta;
+	    						}
+	    					}
+			    		}
+						
+					} else if(resposta == 0) {
+						System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+		    		    cartaRetirada = EntradaTeclado.leInt();
+		    		    
+		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    
+		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+		    		    
+		    		    Carta carta = cartasNaMao[cartaRetirada];
+		    		    
+		    		    return carta;
+					} 
+					break;
+				case 6:
+					System.out.printf("\nDESEJA PEDIR 9? (0 - NAO / 1 - SIM)");
+					resposta = EntradaTeclado.leInt();
+					if(resposta == 1) {
+						rodada.setValorRodada(9);
+			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
+			    		if(resposta == 0) {
+			    			rodada.setValorRodada(6);
+							if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla1(2);
+		    				else rodada.getPlacarRodada().incrementarPontosDupla2(2);
+		    				return new Carta(50,50);
+			    		} else if(resposta == 1) {
+			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " aceitou seu pedido de 9!");
+			    			
+			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+			    		    cartaRetirada = EntradaTeclado.leInt();
+			    		    
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    
+			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+			    		    
+			    		    Carta carta = cartasNaMao[cartaRetirada];
+			    		    
+			    		    return carta;
+			    		} else if(resposta == 2) {
+			    			rodada.setValorRodada(12);
+			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!");
+	    					resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
+	    					if(resposta == 0) {
+	    						rodada.setValorRodada(9);
+	    						if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla2(2);
+			    				else rodada.getPlacarRodada().incrementarPontosDupla1(2);
+			    				return new Carta(50,50);
+	    					} else if(resposta == 1) {
+	    						rodada.setMudouJogador(true);
+			    				return null;
+	    					}
+			    		}
+					} else if(resposta == 0) {
+						System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+		    		    cartaRetirada = EntradaTeclado.leInt();
+		    		    
+		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    
+		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+		    		    
+		    		    Carta carta = cartasNaMao[cartaRetirada];
+		    		    
+		    		    return carta;
+					}
+					break;
+				case 9:
+					System.out.printf("\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)");
+					resposta = EntradaTeclado.leInt();
+					if(resposta == 1) {
+						rodada.setValorRodada(12);
+			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
+			    		if(resposta == 0) {
+			    			rodada.setValorRodada(9);
+			    			if(rodada.getQuemJoga() % 2 == 0) rodada.getPlacarRodada().incrementarPontosDupla1(2);
+		    				else rodada.getPlacarRodada().incrementarPontosDupla2(2);
+		    				return new Carta(50,50);
+			    		} else if(resposta == 1) {
+			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+			    		    cartaRetirada = EntradaTeclado.leInt();
+			    		    
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    
+			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+			    		    
+			    		    Carta carta = cartasNaMao[cartaRetirada];
+			    		    
+			    		    return carta;
+			    		}
+					} else if(resposta == 0) {
+						System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+		    		    cartaRetirada = EntradaTeclado.leInt();
+		    		    
+		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    
+		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+		    		    
+		    		    Carta carta = cartasNaMao[cartaRetirada];
+		    		    
+		    		    return carta;
+					}
+					break;
+				case 12:
+					System.out.println("\nA rodada esta valendo 12!");
+					
+					System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+	    		    cartaRetirada = EntradaTeclado.leInt();
+	    		    
+	    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+	    		    cartaFechada = EntradaTeclado.leInt();
+	    		    
+	    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
+	    		    
+	    		    Carta carta = cartasNaMao[cartaRetirada];
+	    		    
+	    		    return carta;
+			}
 		}
 	}
 	
