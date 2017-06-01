@@ -54,6 +54,7 @@ public class Main {
 							quantosJogaram = 4;
 						}
 					}
+					if(rodada.getMudouJogador() == true) rodada.setMudouJogador(false);
 					rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
 				}
 				
@@ -77,11 +78,16 @@ public class Main {
 			if(duplaQueGanhouARodada == 1) placarJogo.incrementarPontosDupla1(rodada.getValorRodada());
 			else if(duplaQueGanhouARodada == 2) placarJogo.incrementarPontosDupla2(rodada.getValorRodada());
 			
+			System.out.println("\nPLACAR DO JOGO: " + placarJogo.getPontosDupla1() + " x " + placarJogo.getPontosDupla2());
+			
 			quemGanhouUltimaRodada = rodada.getQuemJoga();
 			
 			nroRodada++;
 			baralho.baralho_restaurar();
 		}
+		
+		System.out.println("\nPLACAR FINAL DO JOGO: " + placarJogo.getPontosDupla1() + " x " + placarJogo.getPontosDupla2());
+		System.out.println("\nGAME END");
 	}
 
 }
