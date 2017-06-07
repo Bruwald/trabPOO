@@ -81,20 +81,20 @@ public class Rodada {
 				if(maiorCartaDupla1.getPeso() == cartasJogadas[0].getPeso()){
 					qualJogadorGanhouPrimeiraJogada = 0;
 					return 0;
-				}else {
+				} else {
 					qualJogadorGanhouPrimeiraJogada = 2;
 					return 2;
 				}
 			}
 			
 		} else if(maiorCartaDupla1.getPeso() > maiorCartaDupla2.getPeso()) {
-			if(nroJogada == 1) qualJogadorGanhouPrimeiraJogada = 1;
+			if(nroJogada == 1) qualJogadorGanhouPrimeiraJogada = 1; // ou 3
 			placarRodada.incrementarPontosDupla1(1);
 			nroJogada++;
 			if(maiorCartaDupla1 == cartasJogadas[0]) return 0;
 			else return 2;
 		} else if(maiorCartaDupla1.getPeso() < maiorCartaDupla2.getPeso()) {
-			if(nroJogada == 1) qualJogadorGanhouPrimeiraJogada = 2;
+			if(nroJogada == 1) qualJogadorGanhouPrimeiraJogada = 2; // ou 0
 			placarRodada.incrementarPontosDupla2(1);
 			nroJogada++;
 			if(maiorCartaDupla2 == cartasJogadas[1]) return 1;

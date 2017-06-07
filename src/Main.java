@@ -25,6 +25,9 @@ public class Main {
 			System.out.println("\nCARTA NO CENTRO: " + cartaViradaNoCentro.getValor());
 			
 			manilha = new Carta(1, (cartaViradaNoCentro.getValor() + 1) % 13);
+			if(manilha.getValor() == 8) manilha.setValor(11);
+			else if(manilha.getValor() == 0) manilha.setValor(13);
+			
 			System.out.println("MANILHA: " + manilha.getValor());
 			
 			for(i = 0; i < nroJogadores; i++) {
@@ -42,7 +45,7 @@ public class Main {
 			while(!rodada.getPlacarRodada().alguemGanhou()){
 				
 				if(nroRodada == 1) quemComecouJogada = rodada.getQuemJoga();
-				else rodada.setQuemJoga(quemGanhouUltimaRodada);;
+				else rodada.setQuemJoga(quemGanhouUltimaRodada);
 			
 				while(quantosJogaram < 4) {
 					System.out.println("\n\nVEZ DO " + jogadores[rodada.getQuemJoga()].getNome() + "\n");
