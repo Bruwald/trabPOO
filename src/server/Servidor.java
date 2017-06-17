@@ -196,7 +196,7 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 					
 					jogo.encerrarJogo();
 					flagJogo = false;
-					//break;
+					break;
 				}
 			}catch(SocketTimeoutException e){
 				//
