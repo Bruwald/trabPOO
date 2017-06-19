@@ -232,7 +232,7 @@ public class InterfaceMao extends JFrame {
 		contentPane.add(lblCarta2);
 		
 		lblTrucar = new JLabel("Trucar?");
-		lblTrucar.setBounds(485, 106, 89, 40);
+		lblTrucar.setBounds(450, 91, 124, 55);
 		contentPane.add(lblTrucar);
 		
 		rdbtnCarta0 = new JRadioButton("");

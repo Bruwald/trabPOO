@@ -186,7 +186,7 @@ public class Rodada {
 		String s;
 		ChatMessage chatMessage;
 		
-/**/	s = "MINHA VEZ"; //minha vez trucar/aumentar
+/**/	s = "MINHA VEZ ACEITAR"; //minha vez trucar/aumentar
 		chatMessage = new ChatMessage("Server", s, jogador.getNroJogador(), valorRodada); 			
 		servidor.sendToOne(chatMessage, jogador.getNroJogador());
 		

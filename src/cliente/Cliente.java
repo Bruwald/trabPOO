@@ -234,24 +234,61 @@ public class Cliente implements Runnable{
 				frameMao.getLblTrucar().setText("6?");
 				frameMao.getBtnSim().setVisible(true);
 				frameMao.getBtnNao().setVisible(true);
-				frameMao.getBtnAumentar().setVisible(true);
 				break;
 			case 6:
 				frameMao.getLblTrucar().setText("9?");
 				frameMao.getBtnSim().setVisible(true);
 				frameMao.getBtnNao().setVisible(true);
-				frameMao.getBtnAumentar().setVisible(true);
 				break;
 			case 9:
 				frameMao.getLblTrucar().setText("12?");
 				frameMao.getBtnSim().setVisible(true);
 				frameMao.getBtnNao().setVisible(true);
-				frameMao.getBtnAumentar().setVisible(true);
 				break;
-			case 12:
+			default:
 				frameMao.getLblTrucar().setText("");
 				frameMao.getBtnSim().setVisible(false);
 				frameMao.getBtnNao().setVisible(false);
+				frameMao.getBtnAumentar().setVisible(false);
+				break;
+			}
+			
+//			frameMao.getBtnJogar().setEnabled(true);
+		}else if(chatMessage.getMensagem().equals("MINHA VEZ ACEITAR")){
+			switch(chatMessage.getValRodada()){
+			case 1:
+				frameMao.getLblTrucar().setText("Trucar?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);				
+				break;
+			case 3:
+				frameMao.getLblTrucar().setText("Aceita\nTruco?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);
+				
+				frameMao.getBtnAumentar().setText("6");
+				frameMao.getBtnAumentar().setVisible(true);
+				break;
+			case 6:
+				frameMao.getLblTrucar().setText("Aceita 6?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);
+				
+				frameMao.getBtnAumentar().setText("9");
+				frameMao.getBtnAumentar().setVisible(true);
+				break;
+			case 9:
+				frameMao.getLblTrucar().setText("Aceita 9?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);
+				
+				frameMao.getBtnAumentar().setText("12");
+				frameMao.getBtnAumentar().setVisible(true);
+				break;
+			case 12:
+				frameMao.getLblTrucar().setText("Aceita 12?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);
 				frameMao.getBtnAumentar().setVisible(false);
 				break;
 			}
@@ -262,7 +299,7 @@ public class Cliente implements Runnable{
 		}else if(chatMessage.getMensagem().equals("MINHA VEZ JOGAR CARTA ABERTA FECHADA")){
 //			frameMao.getBtnJogar().setEnabled(true);
 
-			frameMao.getLblTrucar().setText("Aberta?");
+			frameMao.getLblTrucar().setText("Fechada?");
 			frameMao.getBtnSim().setVisible(true);
 			frameMao.getBtnNao().setVisible(true);
 		}
