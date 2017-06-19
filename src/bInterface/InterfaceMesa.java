@@ -78,8 +78,8 @@ public class InterfaceMesa extends JFrame {
 	 * Create the frame.
 	 * @throws IOException 
 	 */
-	public InterfaceMesa(Cliente cliente){
-		setTitle("Mesa");
+	public InterfaceMesa(Cliente cliente, String nome){
+		setTitle("Mesa - " + nome);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 1280, 1000);
@@ -101,7 +101,7 @@ public class InterfaceMesa extends JFrame {
 //		lblJogador2 = new JLabel(imageIcon);
 		lblJogador2 = new JLabel();
 		
-		lblJogador2.setText("kxjbzckbxz\u00E7cal\\scnh\u00E7vkb\\vz\\lbcjb\\acaks");
+		lblJogador2.setText("____________________________________________________");
 		lblJogador2.setBounds(583, 11, 135, 230);
 		contentPane.add(lblJogador2);
 		
@@ -111,7 +111,7 @@ public class InterfaceMesa extends JFrame {
 //		imageIcon = new ImageIcon(image);
 		
 		lblJogador3 = new JLabel();
-		lblJogador3.setText("kxjbzckbxz\u00E7cal\\scnh\u00E7vkb\\vz\\lbcjb\\acaks");
+		lblJogador3.setText("____________________________________________________");
 		lblJogador3.setBounds(10, 382, 135, 230);
 		contentPane.add(lblJogador3);
 		
@@ -121,7 +121,7 @@ public class InterfaceMesa extends JFrame {
 //		imageIcon = new ImageIcon(image);
 		
 		lblJogador1 = new JLabel();
-		lblJogador1.setText("kxjbzckbxz\u00E7cal\\scnh\u00E7vkb\\vz\\lbcjb\\acaks");
+		lblJogador1.setText("____________________________________________________");
 		lblJogador1.setBounds(1129, 382, 135, 230);
 		contentPane.add(lblJogador1);
 		
@@ -131,7 +131,7 @@ public class InterfaceMesa extends JFrame {
 //		imageIcon = new ImageIcon(image);
 		
 		lblJogador0 = new JLabel();
-		lblJogador0.setText("kxjbzckbxz\u00E7cal\\scnh\u00E7vkb\\vz\\lbcjb\\acaks");
+		lblJogador0.setText("____________________________________________________");
 		lblJogador0.setBounds(583, 730, 135, 230);
 		contentPane.add(lblJogador0);
 		
@@ -141,7 +141,7 @@ public class InterfaceMesa extends JFrame {
 //		imageIcon = new ImageIcon(image);
 		
 		lblCartaCentro = new JLabel();
-		lblCartaCentro.setText("kxjbzckbxz\u00E7cal\\scnh\u00E7vkb\\vz\\lbcjb\\acaks");
+		lblCartaCentro.setText("____________________________________________________");
 		lblCartaCentro.setBounds(583, 382, 135, 230);
 		contentPane.add(lblCartaCentro);
 		
@@ -183,6 +183,11 @@ public class InterfaceMesa extends JFrame {
 	}
 	
 	public void pintarCarta(Carta carta, JLabel jogador){
+		if(carta == null){
+			jogador.setIcon(null);
+			return;
+		}
+		
 		ImageIcon imageIcon; //------------------------------------
 		Image image; //------------------------------------
 		

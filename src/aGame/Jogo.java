@@ -16,10 +16,14 @@ public class Jogo {
 	Carta cartaViradaNoCentro, manilha;
 	Carta[] cartasJogadas;
 	Rodada rodada;
+	boolean[] jogaram;
 	
 	private Servidor servidor; //servidor de origem do atendente
 	
 	public Jogo(Servidor servidor) throws Exception {
+		jogaram = new boolean[4];
+		for(i = 0; i < 4; i++) jogaram[i] = false;
+		
 		System.out.println("GAME START");
 
 		jogadores = new Jogador[4];
@@ -140,7 +144,11 @@ public class Jogo {
 		//--------------------------------------------------------------------------------------------------
 		
 		//Se nao mudou de jogador a rodada, incremente quantos jogaram.
-		if(rodada.getMudouJogador() == false) quantosJogaram++;
+		if(rodada.getMudouJogador() == false) {
+			quantosJogaram++;
+			jogaram[rodada.getQuemJoga()] = true;
+		}
+		
 		//Se a carta jogada for diferente de null, entre na condicao if.
 		if(cartasJogadas[rodada.getQuemJoga()] != null) {
 			//Se a carta jogada contiver naipe 50 a rodada acabou e quantos jogaram eh setado como 4.
@@ -153,10 +161,20 @@ public class Jogo {
 		if(rodada.getMudouJogador() == true) rodada.setMudouJogador(false);
 		//Sete quem joga como o jogador seguinte.
 		rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
+		
+		while(jogaram[rodada.getQuemJoga()] == true && quantosJogaram != 4) {
+			rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
+		}
 	
 	}
 	
 	public void encerrarJogada() throws Exception{
+		rodada.setNroJogada(rodada.getNroJogada() + 1);
+	    for(i = 0; i < 4; i++) jogaram[i] = false;		
+		
+	    ChatMessage chatMessage;
+	    String s;
+	    
 		//Se nao acabou a rodada, imprima como foi a rodada (para meios de verificacao de corretude).
 		if(rodada.getAcabouRodada() == false) {
 //			String s = "";
@@ -168,14 +186,19 @@ public class Jogo {
 			System.out.println("\nPlacar atual: " + rodada.getPlacarRodada().getPontosDupla1() + " x " + rodada.getPlacarRodada().getPontosDupla2());
 			System.out.println("Quem ganhou/amarrou a jogada: " + rodada.getQuemJoga());
 
-			String s = "\nPlacar atual: " + rodada.getPlacarRodada().getPontosDupla1() + " x " + rodada.getPlacarRodada().getPontosDupla2();
-			ChatMessage chatMessage = new ChatMessage("Server", s, 5); 
+			s = "\nPlacar atual: " + rodada.getPlacarRodada().getPontosDupla1() + " x " + rodada.getPlacarRodada().getPontosDupla2();
+			chatMessage = new ChatMessage("Server", s, 5); 
 			
 			servidor.sendToAll(chatMessage, 5);		
 		}
 		
 		//Reset em quantos jogaram como zero (0).
 		quantosJogaram = 0;
+		
+		
+		s = "ENCERRAR JOGADA E LIMPAR MESA"; //enviar carta no centro
+		chatMessage = new ChatMessage("Server", s, 5, cartaViradaNoCentro); 
+		servidor.sendToAll(chatMessage, 5);
 	}
 	
 	public void encerrarRodada(Servidor servidor) throws Exception{

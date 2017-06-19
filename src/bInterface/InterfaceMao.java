@@ -22,6 +22,10 @@ import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class InterfaceMao extends JFrame {
 
@@ -78,9 +82,9 @@ public class InterfaceMao extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public InterfaceMao(Carta[] cartas, Cliente cliente) {
+	public InterfaceMao(Carta[] cartas, Cliente cliente, String nome) {
 		setResizable(false);
-		setTitle("Mao");
+		setTitle("Mao - " + nome);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 350);
 		contentPane = new JPanel();
@@ -92,6 +96,8 @@ public class InterfaceMao extends JFrame {
 		Image image; //------------------------------------
 	
 		btnJogar = new JButton("Jogar");
+		btnJogar.setForeground(Color.DARK_GRAY);
+		btnJogar.setFont(new Font("Arial Black", Font.PLAIN, 16));
 		//btnJogar.setBackground(Color.WHITE);
 		btnJogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -139,7 +145,7 @@ public class InterfaceMao extends JFrame {
 				group.clearSelection();
 			}
 		});
-		btnJogar.setBounds(485, 277, 89, 23);
+		btnJogar.setBounds(465, 248, 109, 52);
 		contentPane.add(btnJogar);
 		
 		//CARTA 1
@@ -149,6 +155,8 @@ public class InterfaceMao extends JFrame {
 		imageIcon = new ImageIcon(image);	    
 		
 		btnNao = new JButton("NAO");
+		btnNao.setForeground(Color.DARK_GRAY);
+		btnNao.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		btnNao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -164,10 +172,12 @@ public class InterfaceMao extends JFrame {
 				}
 			}
 		});
-		btnNao.setBounds(485, 238, 89, 23);
+		btnNao.setBounds(475, 169, 89, 23);
 		contentPane.add(btnNao);
 		
 		btnSim = new JButton("SIM");
+		btnSim.setForeground(Color.DARK_GRAY);
+		btnSim.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		btnSim.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -183,10 +193,12 @@ public class InterfaceMao extends JFrame {
 				}
 			}
 		});
-		btnSim.setBounds(485, 199, 89, 23);
+		btnSim.setBounds(475, 130, 89, 23);
 		contentPane.add(btnSim);
 		
 		btnAumentar = new JButton("UP");
+		btnAumentar.setForeground(Color.DARK_GRAY);
+		btnAumentar.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		btnAumentar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -202,10 +214,10 @@ public class InterfaceMao extends JFrame {
 				}
 			}
 		});
-		btnAumentar.setBounds(485, 160, 89, 23);
+		btnAumentar.setBounds(475, 209, 89, 23);
 		contentPane.add(btnAumentar);
 		
-		lblCarta0 = new JLabel(imageIcon);
+		lblCarta0 = new JLabel(imageIcon);		
 		lblCarta0.setBounds(10, 11, 135, 230);
 		contentPane.add(lblCarta0);
 		
@@ -232,25 +244,52 @@ public class InterfaceMao extends JFrame {
 		contentPane.add(lblCarta2);
 		
 		lblTrucar = new JLabel("Trucar?");
-		lblTrucar.setBounds(450, 91, 124, 55);
+		lblTrucar.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTrucar.setForeground(Color.WHITE);
+		lblTrucar.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblTrucar.setBounds(455, 67, 124, 47);
 		contentPane.add(lblTrucar);
 		
 		rdbtnCarta0 = new JRadioButton("");
 		rdbtnCarta0.setBounds(67, 248, 20, 20);
+		rdbtnCarta0.setBackground(new Color(0, 102, 51));
 		contentPane.add(rdbtnCarta0);
 		
 		rdbtnCarta1 = new JRadioButton("");
 		rdbtnCarta1.setBounds(213, 248, 20, 20);
+		rdbtnCarta1.setBackground(new Color(0, 102, 51));
 		contentPane.add(rdbtnCarta1);
 		
 		rdbtnCarta2 = new JRadioButton("");
 		rdbtnCarta2.setBounds(357, 248, 20, 20);
+		rdbtnCarta2.setBackground(new Color(0, 102, 51));
 		contentPane.add(rdbtnCarta2);
 		
 		group = new ButtonGroup();
 	    group.add(rdbtnCarta0);
 	    group.add(rdbtnCarta1);
 	    group.add(rdbtnCarta2);
+	    
+	    lblCarta0.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				rdbtnCarta0.setSelected(true);
+			}
+		});
+	    
+	    lblCarta1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				rdbtnCarta1.setSelected(true);
+			}
+		});
+	    
+	    lblCarta2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				rdbtnCarta2.setSelected(true);
+			}
+		});
 	    
 	    imageIcon = new ImageIcon("Imagens/background.png");
 		image = imageIcon.getImage();

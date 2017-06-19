@@ -89,13 +89,17 @@ public class Mao {
 			chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 			servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 			
-/**/		s = "MINHA VEZ"; //minha vez trucar/aumentar
-			chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
-			servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+///**/		s = "MINHA VEZ"; //minha vez trucar/aumentar
+//			chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
+//			servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 			
 			//Verifica o valor da rodada e vai para o caso especifico, realizando aumento de apostas especificas.
 			switch(rodada.getValorRodada()) {
 				case 1:
+/**/				s = "MINHA VEZ"; //minha vez trucar/aumentar
+					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
+					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+					
 					//Verifica se o jogador deseja trucar a rodada. 
 					System.out.printf("\nDESEJA TRUCAR? (0 - NAO / 1 - SIM)");
 					s = "\nDESEJA TRUCAR? (0 - NAO / 1 - SIM)";
@@ -103,12 +107,10 @@ public class Mao {
 					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 					
-					resposta = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-					
+					resposta = responderSimNao(rodada, atendentes);
 					
 					//resposta = EntradaTeclado.leInt();
 					//Object obj = in.readObject();
-					
 					
 					//Se a resposta for sim, sete quem Trucou como quem joga na rodada e sete o valor da rodada como 3.
 			    	if(resposta == 1) {
@@ -134,46 +136,32 @@ public class Mao {
 							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 										    			
-			    			//Escolha de qual carta o jogador deseja jogar.
-			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-			    			s = "\nJOGAR CARTA (de 0 a 2): ";
-							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-							
-			    		    //cartaRetirada = EntradaTeclado.leInt();
+							//Escolha de qual carta o jogador deseja jogar.
+							cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+			    		     
+			    		    //Escolha do jogador de jogar a carta aberta ou fechada
+							cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 			    		    
-			    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
 							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-							
-			    		    //cartaFechada = EntradaTeclado.leInt();
-			    		    
 			    		    //Se o jogador jogar a carta fechada, sete o peso desta como -1.
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
 			    		    //Pegue a carta que o jogador deseja jogar e a retorne.
 			    		    Carta carta = cartasNaMao[cartaRetirada];
 			    		    
+//			    			s = "PINTAR MESA"; //pintar a carta na mesa
+//			    			chatMessage = new ChatMessage("Server", s, rodada.getJogadores()[rodada.getQuemJoga()].getNroJogador(), carta); 
+//			    			servidor.sendToAll(chatMessage, 5);
+			    		
+			    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+			    		    
 			    		    return carta;
 			    		//Se a resposta do jogador seguinte for (PEDIR 6) sete o valor da jogada como 6 e verifique a resposta
 			    		//do jogador que pediu truco pela primeira vez.
 			    		} else if(resposta == 2) {
+			    			
+			    			rodada.setQuemPediu6((rodada.getQuemJoga() + 1) % 4);
+			    			
 			    			rodada.setValorRodada(6);
 			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 6!");
 			    			s = "\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 6!";
@@ -198,6 +186,9 @@ public class Mao {
 			    				return null;
 			    			//Se a resposta do jogador que pediu truco for 2 (PEDIR 9), verifique a resposta do jogador seguinte novamente, e por ai vai...
 			    			} else if(resposta == 2) {
+			    				
+			    				rodada.setQuemPediu9(rodada.getQuemJoga());
+			    				
 			    				rodada.setValorRodada(9);
 			    				resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4], atendentes, servidor);
 			    				if(resposta == 0) {
@@ -213,40 +204,23 @@ public class Mao {
 									servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 			    					
 			    					
-					    			//Escolha de qual carta o jogador deseja jogar.
-					    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-					    			s = "\nJOGAR CARTA (de 0 a 2): ";
-									
-									chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-									servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-									
-		/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-									chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-									servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-									
-									cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-									
-					    		    //cartaRetirada = EntradaTeclado.leInt();
-					    		    
-					    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-					    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-					    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-									
-									chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-									servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-									
-		/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-									chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-									servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-									
-									cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+									//Escolha de qual carta o jogador deseja jogar.
+									cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+					    		     
+					    		    //Escolha do jogador de jogar a carta aberta ou fechada
+									cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 									
 					    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 					    		    
 					    		    Carta carta = cartasNaMao[cartaRetirada];
 					    		    
+					    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+					    		    
 					    		    return carta;
 			    				} else if (resposta == 2) {
+			    					
+			    					rodada.setQuemPediu12((rodada.getQuemJoga() + 1) % 4);
+			    					
 			    					rodada.setValorRodada(12);
 			    					System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!");
 			    					s = "\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!";
@@ -269,52 +243,44 @@ public class Mao {
 			    			}
 			    		}
 			    	} else if(resposta == 0) {
-		    			//Escolha de qual carta o jogador deseja jogar.
-		    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-		    			s = "\nJOGAR CARTA (de 0 a 2): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-						
-		    		    //cartaRetirada = EntradaTeclado.leInt();
-		    		    
-		    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+			    		//Escolha de qual carta o jogador deseja jogar.
+						cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+		    		     
+		    		    //Escolha do jogador de jogar a carta aberta ou fechada
+						cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 	   
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
 		    		    Carta carta = cartasNaMao[cartaRetirada];
 		    		    
+		    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+		    		    
 		    		    return carta;
 			    	}
 					break;
 				case 3:
-					System.out.printf("\nDESEJA PEDIR 6? (0 - NAO / 1 - SIM)");
-					s = "\nDESEJA PEDIR 6? (0 - NAO / 1 - SIM)";
+					if(rodada.getQuemTrucou() != -1 && ((rodada.getQuemJoga() == rodada.getQuemTrucou()) || ((rodada.getQuemTrucou() + rodada.getQuemJoga()) == 2) || ((rodada.getQuemTrucou() + rodada.getQuemJoga()) == 4))) {
+						resposta = 0;
+					} else {
+/**/					s = "MINHA VEZ"; //minha vez trucar/aumentar
+						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
+						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+						
+						System.out.printf("\nDESEJA PEDIR 6? (0 - NAO / 1 - SIM)");
+						s = "\nDESEJA PEDIR 6? (0 - NAO / 1 - SIM)";
+						
+						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
+						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+						
+						resposta = responderSimNao(rodada, atendentes);
+					}
 					
-					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-					
-					resposta = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();		
 					
 					//resposta = EntradaTeclado.leInt();
 					if(resposta == 1) {
+						
+						rodada.setQuemPediu6(rodada.getQuemJoga());
+						
 						rodada.setValorRodada(6);
 			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4], atendentes, servidor);
 			    		if(resposta == 0) {
@@ -329,41 +295,23 @@ public class Mao {
 							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 			    			
-			    			//Escolha de qual carta o jogador deseja jogar.
-			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-			    			s = "\nJOGAR CARTA (de 0 a 2): ";
-							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-							
-			    		    //cartaRetirada = EntradaTeclado.leInt();
-			    		    
-			    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-							
+							//Escolha de qual carta o jogador deseja jogar.
+							cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+			    		     
+			    		    //Escolha do jogador de jogar a carta aberta ou fechada
+							cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 			    		    
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
 			    		    Carta carta = cartasNaMao[cartaRetirada];
 			    		    
+			    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+			    		    
 			    		    return carta;
 			    		} else if(resposta == 2) {
+			    			
+			    			rodada.setQuemPediu9((rodada.getQuemJoga() + 1) % 4);
+			    			
 			    			rodada.setValorRodada(9);
 			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 9!");
 			    			s = "\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 9!";
@@ -381,6 +329,9 @@ public class Mao {
 	    						rodada.setMudouJogador(true);
 			    				return null;
 	    					} else if(resposta == 2) {
+	    						
+	    						rodada.setQuemPediu12(rodada.getQuemJoga());
+	    						
 	    						rodada.setValorRodada(12);
 	    						resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4], atendentes, servidor);
 	    						if(resposta == 0) {
@@ -395,38 +346,17 @@ public class Mao {
 	    							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 	    							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 	    							
-	    			    			//Escolha de qual carta o jogador deseja jogar.
-	    			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-	    			    			s = "\nJOGAR CARTA (de 0 a 2): ";
-	    							
-	    							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-	    							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-	    							
-	    /**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-	    							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-	    							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-	    							
-	    							cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-	    							
-	    			    		    //cartaRetirada = EntradaTeclado.leInt();
-	    			    		    
-	    			    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-	    			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-	    			    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-	    							
-	    							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-	    							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-	    							
-	    /**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-	    							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-	    							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-	    							
-	    							cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-	    							
+	    							//Escolha de qual carta o jogador deseja jogar.
+	    							cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+	    			    		     
+	    			    		    //Escolha do jogador de jogar a carta aberta ou fechada
+	    							cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 	    			    		    
 	    			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 	    			    		    
 	    			    		    Carta carta = cartasNaMao[cartaRetirada];
+	    			    		    
+	    			    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
 	    			    		    
 	    			    		    return carta;
 	    						}
@@ -434,52 +364,44 @@ public class Mao {
 			    		}
 						
 					} else if(resposta == 0) {
-		    			//Escolha de qual carta o jogador deseja jogar.
-		    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-		    			s = "\nJOGAR CARTA (de 0 a 2): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-						
-		    		    //cartaRetirada = EntradaTeclado.leInt();
-		    		    
-		    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+						//Escolha de qual carta o jogador deseja jogar.
+						cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+		    		     
+		    		    //Escolha do jogador de jogar a carta aberta ou fechada
+						cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 						
 						
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
 		    		    Carta carta = cartasNaMao[cartaRetirada];
 		    		    
+		    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+		    		    
 		    		    return carta;
 					} 
 					break;
 				case 6:
-					System.out.printf("\nDESEJA PEDIR 9? (0 - NAO / 1 - SIM)");
-					s = "\nDESEJA PEDIR 9? (0 - NAO / 1 - SIM)";
+					if(rodada.getQuemPediu6() != -1 && ((rodada.getQuemJoga() == rodada.getQuemPediu6()) || ((rodada.getQuemPediu6() + rodada.getQuemJoga()) == 2) || ((rodada.getQuemPediu6() + rodada.getQuemJoga()) == 4))) {
+						resposta = 0;
+					} else {
+/**/					s = "MINHA VEZ"; //minha vez trucar/aumentar
+						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
+						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+						
+						System.out.printf("\nDESEJA PEDIR 9? (0 - NAO / 1 - SIM)");
+						s = "\nDESEJA PEDIR 9? (0 - NAO / 1 - SIM)";
 					
-					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
+						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 					
-					resposta = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+						resposta = responderSimNao(rodada, atendentes);
+					}
+					
 					//resposta = EntradaTeclado.leInt();
 					if(resposta == 1) {
+						
+						rodada.setQuemPediu9(rodada.getQuemJoga());
+						
 						rodada.setValorRodada(9);
 			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4], atendentes, servidor);
 			    		if(resposta == 0) {
@@ -494,41 +416,24 @@ public class Mao {
 							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 							
-			    			//Escolha de qual carta o jogador deseja jogar.
-			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-			    			s = "\nJOGAR CARTA (de 0 a 2): ";
-							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-							
-			    		    //cartaRetirada = EntradaTeclado.leInt();
-			    		    
-			    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+							//Escolha de qual carta o jogador deseja jogar.
+							cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+			    		     
+			    		    //Escolha do jogador de jogar a carta aberta ou fechada
+							cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 							
 			    		    
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
 			    		    Carta carta = cartasNaMao[cartaRetirada];
 			    		    
+			    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+			    		    
 			    		    return carta;
 			    		} else if(resposta == 2) {
+			    			
+			    			rodada.setQuemPediu12((rodada.getQuemJoga() + 1) % 4);
+			    			
 			    			rodada.setValorRodada(12);
 			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!");
 			    			s = "\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!";
@@ -548,52 +453,44 @@ public class Mao {
 	    					}
 			    		}
 					} else if(resposta == 0) {
-		    			//Escolha de qual carta o jogador deseja jogar.
-		    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-		    			s = "\nJOGAR CARTA (de 0 a 2): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-						
-		    		    //cartaRetirada = EntradaTeclado.leInt();
-		    		    
-		    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+						//Escolha de qual carta o jogador deseja jogar.
+						cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+		    		     
+		    		    //Escolha do jogador de jogar a carta aberta ou fechada
+						cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 						
 						
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
 		    		    Carta carta = cartasNaMao[cartaRetirada];
 		    		    
+		    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+		    		    
 		    		    return carta;
 					}
 					break;
 				case 9:
-					System.out.printf("\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)");
-					s = "\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)";
+					if(rodada.getQuemPediu9() != -1 && ((rodada.getQuemJoga() == rodada.getQuemPediu9()) || ((rodada.getQuemPediu9() + rodada.getQuemJoga()) == 2) || ((rodada.getQuemPediu9() + rodada.getQuemJoga()) == 4))) {
+						resposta = 0;
+					} else {
+/**/					s = "MINHA VEZ"; //minha vez trucar/aumentar
+						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
+						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+						
+					    System.out.printf("\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)");
+					    s = "\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)";
+					    
+					    chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
+					    servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+					    
+					    resposta = responderSimNao(rodada, atendentes);
+					}
 					
-					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-					
-					resposta = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
 					//resposta = EntradaTeclado.leInt();
 					if(resposta == 1) {
+						
+						rodada.setQuemPediu12(rodada.getQuemJoga());
+						
 						rodada.setValorRodada(12);
 			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4], atendentes, servidor);
 			    		if(resposta == 0) {
@@ -603,78 +500,42 @@ public class Mao {
 		    				return new Carta(50,50);
 			    		} else if(resposta == 1) {
 			    			//Escolha de qual carta o jogador deseja jogar.
-			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-			    			s = "\nJOGAR CARTA (de 0 a 2): ";
-							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-							
-			    		    //cartaRetirada = EntradaTeclado.leInt();
-			    		    
-			    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-							
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-							chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-							servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-							
-							cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+							cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+			    		     
+			    		    //Escolha do jogador de jogar a carta aberta ou fechada
+							cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 							
 							
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
 			    		    Carta carta = cartasNaMao[cartaRetirada];
 			    		    
+			    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+			    		    
 			    		    return carta;
 			    		}
 					} else if(resposta == 0) {
-		    			//Escolha de qual carta o jogador deseja jogar.
-		    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-		    			s = "\nJOGAR CARTA (de 0 a 2): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-						
-		    		    //cartaRetirada = EntradaTeclado.leInt();
-		    		    
-		    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-						
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-						
-						cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+						//Escolha de qual carta o jogador deseja jogar.
+						cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+		    		     
+		    		    //Escolha do jogador de jogar a carta aberta ou fechada
+						cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 						
 						
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
 		    		    Carta carta = cartasNaMao[cartaRetirada];
 		    		    
+		    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+		    		    
 		    		    return carta;
 					}
 					break;
 				case 12:
+/**/				s = "MINHA VEZ"; //minha vez trucar/aumentar
+					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
+					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+					
 					System.out.println("\nA rodada esta valendo 12!");
 					s = "\nA rodada esta valendo 12!";
 					
@@ -682,41 +543,78 @@ public class Mao {
 					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 					
 	    			//Escolha de qual carta o jogador deseja jogar.
-	    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
-	    			s = "\nJOGAR CARTA (de 0 a 2): ";
-					
-					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-					
-/**/						s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
-					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-					
-					cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-					
-	    		    //cartaRetirada = EntradaTeclado.leInt();
-	    		    
-	    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-	    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-	    		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
-					
-					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
-					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-					
-/**/						s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
-					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
-					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-					
-					cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+					cartaRetirada = receberCartaRetirada(s, chatMessage, servidor, rodada, atendentes);
+	    		     
+	    		    //Escolha do jogador de jogar a carta aberta ou fechada
+					cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 					
 	    		    
 	    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 	    		    
 	    		    Carta carta = cartasNaMao[cartaRetirada];
 	    		    
+	    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
+	    		    
 	    		    return carta;
 			}
 		}
+	}
+	
+	public void pintarMesa(Carta carta, String s, ChatMessage chatMessage, Servidor servidor, Rodada rodada) throws Exception{
+		s = "PINTAR MESA"; //pintar a carta na mesa
+		chatMessage = new ChatMessage("Server", s, rodada.getJogadores()[rodada.getQuemJoga()].getNroJogador(), carta); 
+		servidor.sendToAll(chatMessage, 5);
+	}
+	
+	public int receberCartaRetirada(String s, ChatMessage chatMessage, Servidor servidor, Rodada rodada, List<Atendente> atendentes) throws Exception{
+		//Escolha de qual carta o jogador deseja jogar.
+		System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
+		s = "\nJOGAR CARTA (de 0 a 2): ";
+		
+		chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
+		servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+		
+/**/	s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
+		chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
+		servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+		
+		int cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+		
+//		s = "PINTAR MESA";
+//		chatMessage = new ChatMessage("Server", s, 5, new Carta(1, 2)); //----------------------
+//		servidor.sendToAll(chatMessage, 5);
+//		
+		
+	    //cartaRetirada = EntradaTeclado.leInt();;
+		return cartaRetirada;
+	}
+	
+	public int receberCartaFechada(String s, ChatMessage chatMessage, Servidor servidor, Rodada rodada, List<Atendente> atendentes) throws Exception{
+		//Escolha do jogador de jogar a carta aberta ou fechada.
+		int cartaFechada = 0;
+		
+		if(rodada.getNroJogada() != 1) {
+		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+		    s = "JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ";
+			
+			chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
+			servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+			
+	/**/	s = "MINHA VEZ JOGAR CARTA ABERTA FECHADA"; //minha vez jogar aberta ou fechada
+			chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
+			servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+			
+			cartaFechada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+        }
+		 
+		//cartaFechada = EntradaTeclado.leInt();
+		return cartaFechada;
+	}
+	
+	public int responderSimNao(Rodada rodada, List<Atendente> atendentes) throws Exception{
+		int resposta = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
+		
+		return resposta;
 	}
 	
 	/**

@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
+import javax.swing.JLabel;
+
 import aGame.Carta;
 import bInterface.InterfaceMao;
 import bInterface.InterfaceMesa;
@@ -198,9 +200,10 @@ public class Cliente implements Runnable{
 		close(); //encerrar/desalocar cliente recursos
 	}
 	
-	public void verificarStringSinal(ChatMessage chatMessage){
+	public void verificarStringSinal(ChatMessage chatMessage) throws InterruptedException{
 		if(chatMessage.getMensagem().equals("GAME START\n")){
-			frameMesa = new InterfaceMesa(this);
+			frameMesa = new InterfaceMesa(this, nome);
+			
 			frameMesa.setVisible(true);
 			
 //			frame = new InterfaceMao(new Carta[]{new Carta(1, 2), new Carta(1, 10), new Carta(1, 5)});
@@ -212,7 +215,13 @@ public class Cliente implements Runnable{
 			if(frameMao != null) frameMao.dispose();
 			frameMao = null;
 		}else if(chatMessage.getMensagem().equals("MINHA MAO")){
-			frameMao = new InterfaceMao(new Carta[]{chatMessage.carta0, chatMessage.carta1, chatMessage.carta2}, this);
+			frameMao = new InterfaceMao(new Carta[]{chatMessage.carta0, chatMessage.carta1, chatMessage.carta2}, this, nome);
+			
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador0()); //zerar mesa
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador1());
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador2());
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador3());			
+			
 			frameMao.getBtnJogar().setEnabled(false);
 			
 			frameMao.getBtnSim().setVisible(false);
@@ -302,6 +311,35 @@ public class Cliente implements Runnable{
 			frameMao.getLblTrucar().setText("Fechada?");
 			frameMao.getBtnSim().setVisible(true);
 			frameMao.getBtnNao().setVisible(true);
+		}else if(chatMessage.getMensagem().equals("PINTAR MESA")){
+			JLabel jlblAux = frameMesa.getLblJogador0(); //default
+			
+			switch(chatMessage.getNomeInt()){
+			case 0:
+				jlblAux = frameMesa.getLblJogador0();
+				break;
+			case 1:
+				jlblAux = frameMesa.getLblJogador1();
+				break;
+			case 2:
+				jlblAux = frameMesa.getLblJogador2();
+				break;
+			case 3:
+				jlblAux = frameMesa.getLblJogador3();
+				break;
+			}
+			
+			if(chatMessage.getCarta().getPeso() == -1){
+				frameMesa.pintarCarta(new Carta(0, 0), jlblAux);
+			}else{
+				frameMesa.pintarCarta(chatMessage.getCarta(), jlblAux);
+			}
+		}else  if(chatMessage.getMensagem().equals("ENCERRAR JOGADA E LIMPAR MESA")){
+			thread.sleep(5000); //esperar 5seg
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador0()); //zerar mesa
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador1());
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador2());
+			frameMesa.pintarCarta(null, frameMesa.getLblJogador3());
 		}
 	}
 	
