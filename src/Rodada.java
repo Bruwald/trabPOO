@@ -27,6 +27,9 @@ public class Rodada {
 	private int valorRodada;
 	private int quemJoga;
 	private int quemTrucou;
+	private int quemPediu6;
+	private int quemPediu9;
+	private int quemPediu12;
 	private int qualJogadorGanhouPrimeiraJogada;
 	private Placar placarRodada;
 	private boolean amarrouJogada1;
@@ -48,6 +51,9 @@ public class Rodada {
 		this.nroJogada = 1;
 		this.quemJoga = 0;
 		this.quemTrucou = -1;
+		this.quemPediu6 = -1;
+		this.quemPediu9 = -1;
+		this.quemPediu12 = -1;
 		this.qualJogadorGanhouPrimeiraJogada = -2;
 		this.placarRodada = new Placar(2);
 		this.amarrouJogada1 = false;
@@ -390,6 +396,31 @@ public class Rodada {
 	 */
 	public void setAcabouRodada(boolean acabouRodada) {
 		this.acabouRodada = acabouRodada;
-	}	
+	}
 
+	public int getQuemPediu6() {
+		return quemPediu6;
+	}
+
+	public void setQuemPediu6(int quemPediu6) {
+		this.quemPediu6 = quemPediu6;
+	}
+
+	public int getQuemPediu9() {
+		return quemPediu9;
+	}
+
+	public void setQuemPediu9(int quemPediu9) {
+		this.quemPediu9 = quemPediu9;
+	}
+
+	public int getQuemPediu12() {
+		return quemPediu12;
+	}
+
+	public void setQuemPediu12(int quemPediu12) {
+		this.quemPediu12 = quemPediu12;
+	}	
+	
+	
 }

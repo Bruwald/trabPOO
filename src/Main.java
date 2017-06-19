@@ -10,6 +10,12 @@ public class Main {
 		Carta cartaViradaNoCentro, manilha;
 		Carta[] cartasJogadas = new Carta[nroJogadores];
 		
+		/*
+		 * MUDEI AQUI
+		 */
+		boolean[] jogaram = new boolean[4];
+		for(i = 0; i < 4; i++) jogaram[i] = false;
+		
 		for(i = 0; i < 4; i++) jogadores[i] = new Jogador("JOGADOR " + i, i);
 		
 		System.out.println("GAME START");
@@ -64,7 +70,11 @@ public class Main {
 					//Pega a carta jogada pelo jogador e armazena esta no vetor de cartas jogadas.
 					cartasJogadas[rodada.getQuemJoga()] = jogadores[rodada.getQuemJoga()].getMao().jogarCarta(rodada);
 					//Se nao mudou de jogador a rodada, incremente quantos jogaram.
-					if(rodada.getMudouJogador() == false) quantosJogaram++;
+					//MUDOU AQUI
+					if(rodada.getMudouJogador() == false) {
+						quantosJogaram++;
+						jogaram[rodada.getQuemJoga()] = true;
+					}
 					//Se a carta jogada for diferente de null, entre na condicao if.
 					if(cartasJogadas[rodada.getQuemJoga()] != null) {
 						//Se a carta jogada contiver naipe 50 a rodada acabou e quantos jogaram eh setado como 4.
@@ -75,9 +85,17 @@ public class Main {
 					}
 					//Se mudou de jogador na rodada, sete se mudou para false para reiniciar o boolean.
 					if(rodada.getMudouJogador() == true) rodada.setMudouJogador(false);
-					//Sete quem joga como o jogador seguinte.
+					
 					rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
+					
+					//Sete quem joga como o jogador seguinte.
+					while(jogaram[rodada.getQuemJoga()] == true && quantosJogaram != 4) {
+						rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
+					}
 				}
+				
+				//MUDEI AQUI
+				for(i = 0; i < 4; i++) jogaram[i] = false;
 				
 				//Se nao acabou a rodada, imprima como foi a rodada (para meios de verificacao de corretude).
 				if(rodada.getAcabouRodada() == false) {

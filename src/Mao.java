@@ -117,6 +117,9 @@ public class Mao {
 			    		//Se a resposta do jogador seguinte for (PEDIR 6) sete o valor da jogada como 6 e verifique a resposta
 			    		//do jogador que pediu truco pela primeira vez.
 			    		} else if(resposta == 2) {
+			    			//------------------------------------------------- MUDEI AQUI --------------------------------
+			    			rodada.setQuemPediu6((rodada.getQuemJoga() + 1) % 4);
+			    			//-------------------------------------------------  --------------------------------
 			    			rodada.setValorRodada(6);
 			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 6!");
 			    			resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
@@ -136,6 +139,9 @@ public class Mao {
 			    				return null;
 			    			//Se a resposta do jogador que pediu truco for 2 (PEDIR 9), verifique a resposta do jogador seguinte novamente, e por ai vai...
 			    			} else if(resposta == 2) {
+			    				//------------------------------------------------- MUDEI AQUI --------------------------------
+				    			rodada.setQuemPediu9(rodada.getQuemJoga());
+				    			//-------------------------------------------------  --------------------------------
 			    				rodada.setValorRodada(9);
 			    				resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
 			    				if(resposta == 0) {
@@ -158,6 +164,9 @@ public class Mao {
 					    		    
 					    		    return carta;
 			    				} else if (resposta == 2) {
+			    					//------------------------------------------------- MUDEI AQUI --------------------------------
+					    			rodada.setQuemPediu12((rodada.getQuemJoga() + 1) % 4);
+					    			//-------------------------------------------------  --------------------------------
 			    					rodada.setValorRodada(12);
 			    					System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!");
 			    					resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
@@ -188,9 +197,17 @@ public class Mao {
 			    	}
 					break;
 				case 3:
-					System.out.printf("\nDESEJA PEDIR 6? (0 - NAO / 1 - SIM)");
-					resposta = EntradaTeclado.leInt();
+					//MUDEI AQUI
+					if(rodada.getQuemTrucou() != -1 && ((rodada.getQuemJoga() == rodada.getQuemTrucou()) || ((rodada.getQuemTrucou() + rodada.getQuemJoga()) == 2) || ((rodada.getQuemTrucou() + rodada.getQuemJoga()) == 4))) {
+						resposta = 0;
+					} else {
+						System.out.printf("\nDESEJA PEDIR 6? (0 - NAO / 1 - SIM)");
+						resposta = EntradaTeclado.leInt();
+					}
 					if(resposta == 1) {
+						//------------------------------------------------- MUDEI AQUI --------------------------------
+		    			rodada.setQuemPediu6(rodada.getQuemJoga());
+		    			//-------------------------------------------------  --------------------------------
 						rodada.setValorRodada(6);
 			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
 			    		if(resposta == 0) {
@@ -213,6 +230,9 @@ public class Mao {
 			    		    
 			    		    return carta;
 			    		} else if(resposta == 2) {
+			    			//------------------------------------------------- MUDEI AQUI --------------------------------
+			    			rodada.setQuemPediu9((rodada.getQuemJoga() + 1) % 4);
+			    			//-------------------------------------------------  --------------------------------
 			    			rodada.setValorRodada(9);
 			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 9!");
 	    					resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
@@ -225,6 +245,9 @@ public class Mao {
 	    						rodada.setMudouJogador(true);
 			    				return null;
 	    					} else if(resposta == 2) {
+	    						//------------------------------------------------- MUDEI AQUI --------------------------------
+				    			rodada.setQuemPediu12(rodada.getQuemJoga());
+				    			//-------------------------------------------------  --------------------------------
 	    						rodada.setValorRodada(12);
 	    						resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
 	    						if(resposta == 0) {
@@ -265,9 +288,17 @@ public class Mao {
 					} 
 					break;
 				case 6:
-					System.out.printf("\nDESEJA PEDIR 9? (0 - NAO / 1 - SIM)");
-					resposta = EntradaTeclado.leInt();
+					//MUDEI AQUI
+					if(rodada.getQuemPediu6() != -1 && ((rodada.getQuemJoga() == rodada.getQuemPediu6()) || ((rodada.getQuemPediu6() + rodada.getQuemJoga()) == 2) || ((rodada.getQuemPediu6() + rodada.getQuemJoga()) == 4))) {
+						resposta = 0;
+					} else {
+						System.out.printf("\nDESEJA PEDIR 9? (0 - NAO / 1 - SIM)");
+						resposta = EntradaTeclado.leInt();
+					}
 					if(resposta == 1) {
+						//------------------------------------------------- MUDEI AQUI --------------------------------
+		    			rodada.setQuemPediu9(rodada.getQuemJoga());
+		    			//-------------------------------------------------  --------------------------------
 						rodada.setValorRodada(9);
 			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
 			    		if(resposta == 0) {
@@ -290,6 +321,9 @@ public class Mao {
 			    		    
 			    		    return carta;
 			    		} else if(resposta == 2) {
+			    			//------------------------------------------------- MUDEI AQUI --------------------------------
+			    			rodada.setQuemPediu12((rodada.getQuemJoga() + 1) % 4);
+			    			//-------------------------------------------------  --------------------------------
 			    			rodada.setValorRodada(12);
 			    			System.out.println("\nO jogador " + rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4].getNome() + " pediu 12!");
 	    					resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga())]);
@@ -318,9 +352,17 @@ public class Mao {
 					}
 					break;
 				case 9:
-					System.out.printf("\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)");
-					resposta = EntradaTeclado.leInt();
+					//MUDEI AQUI
+					if(rodada.getQuemPediu9() != -1 && ((rodada.getQuemJoga() == rodada.getQuemPediu9()) || ((rodada.getQuemPediu9() + rodada.getQuemJoga()) == 2) || ((rodada.getQuemPediu9() + rodada.getQuemJoga()) == 4))) {
+						resposta = 0;
+					} else {
+						System.out.printf("\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)");
+						resposta = EntradaTeclado.leInt();
+					}
 					if(resposta == 1) {
+						//------------------------------------------------- MUDEI AQUI --------------------------------
+		    			rodada.setQuemPediu12(rodada.getQuemJoga());
+		    			//-------------------------------------------------  --------------------------------
 						rodada.setValorRodada(12);
 			    		resposta = rodada.jogadorAceitaEstadoDaAposta(rodada.getJogadores()[(rodada.getQuemJoga() + 1) % 4]);
 			    		if(resposta == 0) {
