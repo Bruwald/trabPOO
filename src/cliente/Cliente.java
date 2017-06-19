@@ -13,6 +13,10 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
+import aGame.Carta;
+import bInterface.InterfaceMao;
+import bInterface.InterfaceMesa;
+
 
 //obs: quando o servidor eh encerrado antes do cliente ele encerra os clientes abertos
 //     assim que o cliente tentar enviar uma mensagem ele eh tambem para
@@ -36,6 +40,8 @@ public class Cliente implements Runnable{
 	private Thread thread;
 	
 	private String nome;
+	private InterfaceMesa frameMesa;
+	private InterfaceMao frameMao;
 	
 	public Cliente(String endereco, int porta, String nome) throws Exception{ //construtor //manda inicializar conexao e obter InputStream e OutputStream
 		inicializado = false;
@@ -138,6 +144,21 @@ public class Cliente implements Runnable{
 		out.flush(); //garantir que o envio seja feito corretamente / limpar o cache / ler ate o fim do buffer
 	}
 	
+	/*
+	 * InterfaceMesa frame = new InterfaceMesa();
+		frame.setVisible(true);
+		
+		frame.pintarCarta(new Carta(1, 2), frame.getLblCartaCentro());
+		
+		new Scanner(System.in).nextLine();
+		
+		frame.pintarCarta(new Carta(2, 5), frame.getLblCartaCentro());
+		frame.pintarCarta(new Carta(3, 6), frame.getLblJogador0());
+		frame.pintarCarta(new Carta(1, 7), frame.getLblJogador1());
+		frame.pintarCarta(new Carta(1, 10), frame.getLblJogador2());
+		frame.pintarCarta(new Carta(4, 13), frame.getLblJogador3());
+//		
+	 */
 	@Override
 	public void run() {
 		while(executando){
@@ -160,6 +181,8 @@ public class Cliente implements Runnable{
 				if(obj instanceof ChatMessage){
 					//System.out.println("Mensagem enviada pelo servidor " + chatMessage.getNome() + " : " + chatMessage.getMensagem());
 					System.out.println("\n" + chatMessage.getNome() + " : " + chatMessage.getMensagem());
+				
+					verificarStringSinal(chatMessage);					
 				}
 			}catch(SocketTimeoutException e){
 				//ignorar, apenas para circular a thread enquanto espera mensagem
@@ -173,6 +196,76 @@ public class Cliente implements Runnable{
 		}
 		
 		close(); //encerrar/desalocar cliente recursos
+	}
+	
+	public void verificarStringSinal(ChatMessage chatMessage){
+		if(chatMessage.getMensagem().equals("GAME START\n")){
+			frameMesa = new InterfaceMesa(this);
+			frameMesa.setVisible(true);
+			
+//			frame = new InterfaceMao(new Carta[]{new Carta(1, 2), new Carta(1, 10), new Carta(1, 5)});
+//			frame.setVisible(true);
+//			frame.toFront();
+			frameMao = null;
+		}else if(chatMessage.getMensagem().equals("CARTA VIRADA NO CENTRO")){
+			frameMesa.pintarCarta(chatMessage.getCarta(), frameMesa.getLblCartaCentro());
+			if(frameMao != null) frameMao.dispose();
+			frameMao = null;
+		}else if(chatMessage.getMensagem().equals("MINHA MAO")){
+			frameMao = new InterfaceMao(new Carta[]{chatMessage.carta0, chatMessage.carta1, chatMessage.carta2}, this);
+			frameMao.getBtnJogar().setEnabled(false);
+			
+			frameMao.getBtnSim().setVisible(false);
+			frameMao.getBtnNao().setVisible(false);
+			frameMao.getBtnAumentar().setVisible(false);
+//			frameMao.getLblTrucar().setVisible(false);			
+			frameMao.getLblTrucar().setText("");
+			
+			frameMao.setVisible(true);
+			frameMao.toFront();			
+		}else if(chatMessage.getMensagem().equals("MINHA VEZ")){
+			switch(chatMessage.getValRodada()){
+			case 1:
+				frameMao.getLblTrucar().setText("Trucar?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);				
+				break;
+			case 3:
+				frameMao.getLblTrucar().setText("6?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);
+				frameMao.getBtnAumentar().setVisible(true);
+				break;
+			case 6:
+				frameMao.getLblTrucar().setText("9?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);
+				frameMao.getBtnAumentar().setVisible(true);
+				break;
+			case 9:
+				frameMao.getLblTrucar().setText("12?");
+				frameMao.getBtnSim().setVisible(true);
+				frameMao.getBtnNao().setVisible(true);
+				frameMao.getBtnAumentar().setVisible(true);
+				break;
+			case 12:
+				frameMao.getLblTrucar().setText("");
+				frameMao.getBtnSim().setVisible(false);
+				frameMao.getBtnNao().setVisible(false);
+				frameMao.getBtnAumentar().setVisible(false);
+				break;
+			}
+			
+//			frameMao.getBtnJogar().setEnabled(true);
+		}else if(chatMessage.getMensagem().equals("MINHA VEZ JOGAR CARTA")){
+			frameMao.getBtnJogar().setEnabled(true);
+		}else if(chatMessage.getMensagem().equals("MINHA VEZ JOGAR CARTA ABERTA FECHADA")){
+//			frameMao.getBtnJogar().setEnabled(true);
+
+			frameMao.getLblTrucar().setText("Aberta?");
+			frameMao.getBtnSim().setVisible(true);
+			frameMao.getBtnNao().setVisible(true);
+		}
 	}
 	
 	public static void main(String[] args) throws Exception{ //auto-"tratar" excecoes / nao tratar

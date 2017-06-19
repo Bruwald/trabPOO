@@ -185,6 +185,11 @@ public class Rodada {
 		int resposta = 0;
 		String s;
 		ChatMessage chatMessage;
+		
+/**/	s = "MINHA VEZ"; //minha vez trucar/aumentar
+		chatMessage = new ChatMessage("Server", s, jogador.getNroJogador(), valorRodada); 			
+		servidor.sendToOne(chatMessage, jogador.getNroJogador());
+		
 		//De acordo com o valor da rodada, imprima a mensagem correspondente e retorne a resposta do jogador.
 		switch(getValorRodada()) {
 			case 3:

@@ -1,7 +1,9 @@
 package aGame;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
 
+import bInterface.InterfaceMesa;
 import cliente.ChatMessage;
 import server.Atendente;
 import server.Servidor;
@@ -71,6 +73,11 @@ public class Jogo {
 		ChatMessage chatMessage = new ChatMessage("Server", s, 5); 
 		
 		servidor.sendToAll(chatMessage, 5);		
+		
+		s = "CARTA VIRADA NO CENTRO"; //enviar carta no centro
+		chatMessage = new ChatMessage("Server", s, 5, cartaViradaNoCentro); 
+		servidor.sendToAll(chatMessage, 5);
+		
 	}
 	
 	public void proximaRodada2(int jogadorNum) throws Exception{
@@ -92,6 +99,13 @@ public class Jogo {
 		ChatMessage chatMessage = new ChatMessage("Server", s, jogadorNum); 
 		
 		servidor.sendToOne(chatMessage, jogadorNum);		
+		
+		s = "MINHA MAO"; //enviar mao
+		chatMessage = new ChatMessage("Server", s, jogadorNum, 
+				jogadores[jogadorNum].getMao().getCartasNaMao()[0], 
+				jogadores[jogadorNum].getMao().getCartasNaMao()[1], 
+				jogadores[jogadorNum].getMao().getCartasNaMao()[2]); 
+		servidor.sendToOne(chatMessage, jogadorNum);
 	}
 	
 	public void newRodada(){
@@ -114,12 +128,16 @@ public class Jogo {
 		
 		ChatMessage chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 
 		
-		servidor.sendToOne(chatMessage, rodada.getQuemJoga());	
+		servidor.sendToOne(chatMessage, rodada.getQuemJoga());
+		
+//		s = "MINHA VEZ"; //minha vez
+//		chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
+//		servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 		
 		
 		//Pega a carta jogada pelo jogador e armazena esta no vetor de cartas jogadas.
 		cartasJogadas[rodada.getQuemJoga()] = jogadores[rodada.getQuemJoga()].getMao().jogarCarta(rodada, atendentes, servidor);
-		
+		//--------------------------------------------------------------------------------------------------
 		
 		//Se nao mudou de jogador a rodada, incremente quantos jogaram.
 		if(rodada.getMudouJogador() == false) quantosJogaram++;

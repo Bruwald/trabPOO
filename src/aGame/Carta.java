@@ -1,11 +1,13 @@
 package aGame;
 
+import java.io.Serializable;
+
 /**
  * Classe Responsavel pelo objeto Carta de um baralho
  * @author 
  *
  */
-public class Carta {
+public class Carta implements Serializable{
 	private int naipe;
 	private int valor; //dama valete rei / 10 11 12 (truco: 4 5 6 7 dama valete rei A 2 3 Manilha
 	private int peso; //peso utilizado para avaliar carta, que vai variar dependendo do jogo
