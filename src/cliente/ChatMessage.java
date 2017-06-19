@@ -11,6 +11,7 @@ public class ChatMessage implements Serializable{
 	Carta carta;
 	Carta carta0, carta1, carta2;
 	int valRodada;
+	int placarG1, placarG2;
 	
 	public ChatMessage(String nome, String mensagem, int nomeInt) {
 		//super();
@@ -55,6 +56,19 @@ public class ChatMessage implements Serializable{
 		this.carta1 = null;
 		this.carta2 = null;
 		this.valRodada = valRodada;
+	}
+	
+	public ChatMessage(String nome, String mensagem, int nomeInt, int placarG1, int placarG2) {
+		//super();
+		this.nome = nome;
+		this.mensagem = mensagem;
+		this.nomeInt = nomeInt;
+		this.carta = null;
+		this.carta0 = null;
+		this.carta1 = null;
+		this.carta2 = null;
+		this.placarG1 = placarG1;
+		this.placarG2 = placarG2;
 	}
 
 	public String getNome() {
@@ -119,6 +133,22 @@ public class ChatMessage implements Serializable{
 
 	public void setValRodada(int valRodada) {
 		this.valRodada = valRodada;
+	}
+
+	public int getPlacarG1() {
+		return placarG1;
+	}
+
+	public void setPlacarG1(int placarG1) {
+		this.placarG1 = placarG1;
+	}
+
+	public int getPlacarG2() {
+		return placarG2;
+	}
+
+	public void setPlacarG2(int placarG2) {
+		this.placarG2 = placarG2;
 	}	
 	
 	

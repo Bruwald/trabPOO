@@ -190,6 +190,10 @@ public class Jogo {
 			chatMessage = new ChatMessage("Server", s, 5); 
 			
 			servidor.sendToAll(chatMessage, 5);		
+			
+			s = "PLACAR RODADA"; //enviar placar rodada
+			chatMessage = new ChatMessage("Server", s, 5, rodada.getPlacarRodada().getPontosDupla1(), rodada.getPlacarRodada().getPontosDupla2()); 
+			servidor.sendToAll(chatMessage, 5);
 		}
 		
 		//Reset em quantos jogaram como zero (0).
@@ -221,6 +225,10 @@ public class Jogo {
 		chatMessage = new ChatMessage("Server", s, 5); 
 		
 		servidor.sendToAll(chatMessage, 5);	
+		
+		s = "PLACAR JOGO"; //enviar placar jogo
+		chatMessage = new ChatMessage("Server", s, 5, placarJogo.getPontosDupla1(), placarJogo.getPontosDupla2()); 
+		servidor.sendToAll(chatMessage, 5);		
 			
 		
 		//Sete quem ganhou a ultima rodada como quem joga nesta rodada (quem ganhou).

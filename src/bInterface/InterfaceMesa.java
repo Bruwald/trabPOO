@@ -24,6 +24,8 @@ import javax.swing.Icon;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class InterfaceMesa extends JFrame {
 
@@ -39,6 +41,13 @@ public class InterfaceMesa extends JFrame {
 	private JLabel lblPlacarG2;
 	private JLabel lblG1;
 	private JLabel lblG2;
+	private JLabel lblRodada;
+	private JLabel lblPlacarRodada;
+	private JLabel lblGrupo1;
+	private JLabel lblRodadaG1;
+	private JLabel lblGrupo2;
+	private JLabel lblRodadaG2;
+	private JLabel lblBaralho;
 
 	/**
 	 * Launch the application.
@@ -146,40 +155,105 @@ public class InterfaceMesa extends JFrame {
 		contentPane.add(lblCartaCentro);
 		
 		lblPlacar = new JLabel("Placar");
-		lblPlacar.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblPlacar.setBounds(1081, 42, 46, 14);
+		lblPlacar.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPlacar.setForeground(Color.WHITE);
+		lblPlacar.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblPlacar.setBounds(984, 49, 91, 33);
 		contentPane.add(lblPlacar);
 		
 		lblPlacarG1 = new JLabel("00");
-		lblPlacarG1.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblPlacarG1.setBounds(1150, 42, 46, 14);
+		lblPlacarG1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPlacarG1.setForeground(Color.WHITE);
+		lblPlacarG1.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblPlacarG1.setBounds(1078, 49, 91, 33);
 		contentPane.add(lblPlacarG1);
 		
 		lblPlacarG2 = new JLabel("00");
-		lblPlacarG2.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblPlacarG2.setBounds(1218, 42, 46, 14);
+		lblPlacarG2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPlacarG2.setForeground(Color.WHITE);
+		lblPlacarG2.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblPlacarG2.setBounds(1168, 49, 91, 33);
 		contentPane.add(lblPlacarG2);
 		
 		lblG1 = new JLabel("G1");
-		lblG1.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblG1.setBounds(1150, 11, 46, 14);
+		lblG1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblG1.setForeground(Color.WHITE);
+		lblG1.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblG1.setBounds(1078, 16, 91, 33);
 		contentPane.add(lblG1);
 		
 		lblG2 = new JLabel("G2");
-		lblG2.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblG2.setBounds(1218, 11, 46, 14);
+		lblG2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblG2.setForeground(Color.WHITE);
+		lblG2.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblG2.setBounds(1168, 16, 91, 33);
 		contentPane.add(lblG2);
 		
 		imageIcon = new ImageIcon("Imagens/background.png");
 		image = imageIcon.getImage();
 		image = image.getScaledInstance(1300, 1000, Image.SCALE_DEFAULT);
 		imageIcon = new ImageIcon(image);
+		
+		JLabel lblJogo = new JLabel("Jogo");
+		lblJogo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJogo.setForeground(Color.WHITE);
+		lblJogo.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblJogo.setBounds(984, 16, 91, 33);
+		contentPane.add(lblJogo);
+		
+		lblRodada = new JLabel("Rodada");
+		lblRodada.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRodada.setForeground(Color.WHITE);
+		lblRodada.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblRodada.setBounds(10, 11, 91, 33);
+		contentPane.add(lblRodada);
+		
+		lblPlacarRodada = new JLabel("Placar");
+		lblPlacarRodada.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPlacarRodada.setForeground(Color.WHITE);
+		lblPlacarRodada.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblPlacarRodada.setBounds(10, 44, 91, 33);
+		contentPane.add(lblPlacarRodada);
+		
+		lblGrupo1 = new JLabel("G1");
+		lblGrupo1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGrupo1.setForeground(Color.WHITE);
+		lblGrupo1.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblGrupo1.setBounds(104, 11, 91, 33);
+		contentPane.add(lblGrupo1);
+		
+		lblRodadaG1 = new JLabel("00");
+		lblRodadaG1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRodadaG1.setForeground(Color.WHITE);
+		lblRodadaG1.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblRodadaG1.setBounds(104, 44, 91, 33);
+		contentPane.add(lblRodadaG1);
+		
+		lblGrupo2 = new JLabel("G2");
+		lblGrupo2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGrupo2.setForeground(Color.WHITE);
+		lblGrupo2.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblGrupo2.setBounds(194, 11, 91, 33);
+		contentPane.add(lblGrupo2);
+		
+		lblRodadaG2 = new JLabel("00");
+		lblRodadaG2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRodadaG2.setForeground(Color.WHITE);
+		lblRodadaG2.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblRodadaG2.setBounds(194, 44, 91, 33);
+		contentPane.add(lblRodadaG2);
+		
+		lblBaralho = new JLabel();
+		lblBaralho.setText("____________________________________________________");
+		lblBaralho.setBounds(515, 346, 135, 230);
+		contentPane.add(lblBaralho);
 	    
 		jbackground = new JLabel(imageIcon);
 		jbackground.setSize(1300, 1000);
 		jbackground.setLocation(0,0);
 		contentPane.add(jbackground); 
 		
+		pintarCarta(new Carta(0, 0), lblBaralho);		
 	}
 	
 	public void pintarCarta(Carta carta, JLabel jogador){
@@ -218,19 +292,26 @@ public class InterfaceMesa extends JFrame {
 	public JLabel getLblCartaCentro() {
 		return lblCartaCentro;
 	}
+
+	public JLabel getLblPlacarG1() {
+		return lblPlacarG1;
+	}
+
+	public JLabel getLblPlacarG2() {
+		return lblPlacarG2;
+	}
+
+	public JLabel getLblRodadaG1() {
+		return lblRodadaG1;
+	}
+
+	public JLabel getLblRodadaG2() {
+		return lblRodadaG2;
+	}
+
+	public JLabel getLblBaralho() {
+		return lblBaralho;
+	}
 	
 	
-//	
-//	public void paintComponent (Graphics g) throws IOException {
-//		
-//		AffineTransform AT = AffineTransform.getTranslateInstance(100, 100);
-//		AT.rotate(Math.toRadians(45));
-//		
-//		BufferedImage Image = ImageIO.read(getClass().getResourceAsStream("carta.png"));
-//		
-//		Graphics2D newimage = (Graphics2D) g;
-//		
-//		newimage.drawImage(Image, AT, null);
-//		
-//	}
 }
