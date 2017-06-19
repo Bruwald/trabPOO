@@ -89,10 +89,14 @@ public class Main {
 					rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
 					
 					//Sete quem joga como o jogador seguinte.
+					//MUDEI AQUI
 					while(jogaram[rodada.getQuemJoga()] == true && quantosJogaram != 4) {
 						rodada.setQuemJoga((rodada.getQuemJoga() + 1) % 4);
 					}
 				}
+				
+				//MUDEI AQUI
+				rodada.setNroJogada(rodada.getNroJogada() + 1);
 				
 				//MUDEI AQUI
 				for(i = 0; i < 4; i++) jogaram[i] = false;

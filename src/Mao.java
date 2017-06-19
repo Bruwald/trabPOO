@@ -104,8 +104,11 @@ public class Mao {
 			    		    cartaRetirada = EntradaTeclado.leInt();
 			    		    
 			    		    //Escolha do jogador de jogar a carta aberta ou fechada.
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    //MUDEI AQUI
+			    		    if(rodada.getNroJogada() != 1) {
+				    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+				    		    cartaFechada = EntradaTeclado.leInt();
+			    		    } else cartaFechada = 0;
 			    		    
 			    		    //Se o jogador jogar a carta fechada, sete o peso desta como -1.
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
@@ -155,8 +158,11 @@ public class Mao {
 					    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 					    		    cartaRetirada = EntradaTeclado.leInt();
 					    		    
-					    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-					    		    cartaFechada = EntradaTeclado.leInt();
+					    		    //MUDEI AQUI
+					    		    if(rodada.getNroJogada() != 1) {
+						    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+						    		    cartaFechada = EntradaTeclado.leInt();
+					    		    } else cartaFechada = 0;
 					    		    
 					    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 					    		    
@@ -186,8 +192,11 @@ public class Mao {
 			    		System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 		    		    cartaRetirada = EntradaTeclado.leInt();
 		    		    
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    //MUDEI AQUI
+		    		    if(rodada.getNroJogada() != 1) {
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+		    		    } else cartaFechada = 0;
 		    		    
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
@@ -221,8 +230,11 @@ public class Mao {
 			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 			    		    cartaRetirada = EntradaTeclado.leInt();
 			    		    
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    //MUDEI AQUI
+			    		    if(rodada.getNroJogada() != 1) {
+				    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+				    		    cartaFechada = EntradaTeclado.leInt();
+			    		    } else cartaFechada = 0;
 			    		    
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
@@ -261,8 +273,11 @@ public class Mao {
 	    			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 	    			    		    cartaRetirada = EntradaTeclado.leInt();
 	    			    		    
-	    			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-	    			    		    cartaFechada = EntradaTeclado.leInt();
+	    			    		    //MUDEI AQUI
+	    			    		    if(rodada.getNroJogada() != 1) {
+	    				    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+	    				    		    cartaFechada = EntradaTeclado.leInt();
+	    			    		    } else cartaFechada = 0;
 	    			    		    
 	    			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 	    			    		    
@@ -277,8 +292,11 @@ public class Mao {
 						System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 		    		    cartaRetirada = EntradaTeclado.leInt();
 		    		    
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    //MUDEI AQUI
+		    		    if(rodada.getNroJogada() != 1) {
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+		    		    } else cartaFechada = 0;
 		    		    
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
@@ -312,8 +330,11 @@ public class Mao {
 			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 			    		    cartaRetirada = EntradaTeclado.leInt();
 			    		    
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    //MUDEI AQUI
+			    		    if(rodada.getNroJogada() != 1) {
+				    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+				    		    cartaFechada = EntradaTeclado.leInt();
+			    		    } else cartaFechada = 0;
 			    		    
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
@@ -341,8 +362,11 @@ public class Mao {
 						System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 		    		    cartaRetirada = EntradaTeclado.leInt();
 		    		    
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    //MUDEI AQUI
+		    		    if(rodada.getNroJogada() != 1) {
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+		    		    } else cartaFechada = 0;
 		    		    
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
@@ -374,8 +398,11 @@ public class Mao {
 			    			System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 			    		    cartaRetirada = EntradaTeclado.leInt();
 			    		    
-			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-			    		    cartaFechada = EntradaTeclado.leInt();
+			    		    //MUDEI AQUI
+			    		    if(rodada.getNroJogada() != 1) {
+				    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+				    		    cartaFechada = EntradaTeclado.leInt();
+			    		    } else cartaFechada = 0;
 			    		    
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
@@ -387,8 +414,11 @@ public class Mao {
 						System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 		    		    cartaRetirada = EntradaTeclado.leInt();
 		    		    
-		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-		    		    cartaFechada = EntradaTeclado.leInt();
+		    		    //MUDEI AQUI
+		    		    if(rodada.getNroJogada() != 1) {
+			    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+			    		    cartaFechada = EntradaTeclado.leInt();
+		    		    } else cartaFechada = 0;
 		    		    
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
@@ -403,8 +433,11 @@ public class Mao {
 					System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
 	    		    cartaRetirada = EntradaTeclado.leInt();
 	    		    
-	    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
-	    		    cartaFechada = EntradaTeclado.leInt();
+	    		    //MUDEI AQUI
+	    		    if(rodada.getNroJogada() != 1) {
+		    		    System.out.printf("JOGAR CARTA (0 - ABERTA / 1 - FECHADA): ");
+		    		    cartaFechada = EntradaTeclado.leInt();
+	    		    } else cartaFechada = 0;
 	    		    
 	    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 	    		    
