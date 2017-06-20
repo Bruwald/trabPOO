@@ -43,7 +43,7 @@ public class Jogo {
 	}
 	
 	public void iniciarTelas() throws Exception{
-		String s = "GAME START\n";		
+		String s = "GAME START";		
 		
 		ChatMessage chatMessage = new ChatMessage("Server", s, 5); 
 		
@@ -200,8 +200,8 @@ public class Jogo {
 		quantosJogaram = 0;
 		
 		
-		s = "ENCERRAR JOGADA E LIMPAR MESA"; //enviar carta no centro
-		chatMessage = new ChatMessage("Server", s, 5, cartaViradaNoCentro); 
+		s = "ENCERRAR JOGADA E LIMPAR MESA"; //limpar a mesa e mostrar quem ganhou jogada
+		chatMessage = new ChatMessage("Server", s, 5, rodada.getQuemJoga()); 
 		servidor.sendToAll(chatMessage, 5);
 	}
 	
@@ -214,6 +214,10 @@ public class Jogo {
 		ChatMessage chatMessage = new ChatMessage("Server", s, 5); 
 		
 		servidor.sendToAll(chatMessage, 5);	
+		
+		s = "ENCERRAR RODADA"; //mostrar quem ganhou rodada
+		chatMessage = new ChatMessage("Server", s, 5, duplaQueGanhouARodada); 
+		servidor.sendToAll(chatMessage, 5);
 		
 		//Incremente o ponto do placar do jogo de acordo com quem ganhou a rodada.
 		if(duplaQueGanhouARodada == 1) placarJogo.incrementarPontosDupla1(rodada.getValorRodada());
@@ -248,6 +252,10 @@ public class Jogo {
 		ChatMessage chatMessage = new ChatMessage("Server", s, 5); 
 		
 		servidor.sendToAll(chatMessage, 5);	
+		
+		s = "ENCERRAR JOGO"; //mostrar quem ganhou rodada
+		chatMessage = new ChatMessage("Server", s, 5, placarJogo.getPontosDupla1(), placarJogo.getPontosDupla2()); 
+		servidor.sendToAll(chatMessage, 5);
 	}
 	
 //	public void iniciar() throws Exception{		

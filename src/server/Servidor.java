@@ -176,8 +176,9 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 						}
 						
 						jogo.newRodada();
+						jogo.proximaJogada();
 						while(!jogo.getRodada().getPlacarRodada().alguemGanhou()){
-							jogo.proximaJogada();
+//							jogo.proximaJogada();
 							//Enquanto todos nao jogaram
 							while(jogo.getQuantosJogaram() < 4) { //------------------------------------------------------
 								flagAtendenteProximoaJogar = true;

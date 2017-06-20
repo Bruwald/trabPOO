@@ -85,7 +85,8 @@ public class InterfaceMao extends JFrame {
 	public InterfaceMao(Carta[] cartas, Cliente cliente, String nome) {
 		setResizable(false);
 		setTitle("Mao - " + nome);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 600, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -273,21 +274,24 @@ public class InterfaceMao extends JFrame {
 	    lblCarta0.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				rdbtnCarta0.setSelected(true);
+				if(lblCarta0.isEnabled())
+					rdbtnCarta0.setSelected(true);
 			}
 		});
 	    
 	    lblCarta1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				rdbtnCarta1.setSelected(true);
+				if(lblCarta1.isEnabled())
+					rdbtnCarta1.setSelected(true);
 			}
 		});
 	    
 	    lblCarta2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				rdbtnCarta2.setSelected(true);
+				if(lblCarta2.isEnabled())
+					rdbtnCarta2.setSelected(true);
 			}
 		});
 	    

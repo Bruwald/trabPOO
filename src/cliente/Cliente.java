@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
 
 import aGame.Carta;
 import bInterface.InterfaceMao;
@@ -205,11 +206,14 @@ public class Cliente implements Runnable{
 		close(); //encerrar/desalocar cliente recursos
 	}
 	
-	public boolean verificarStringSinal(ChatMessage chatMessage) throws InterruptedException{
-		if(chatMessage.getMensagem().equals("GAME START\n")){
+	public boolean verificarStringSinal(ChatMessage chatMessage) throws Exception{
+		if(chatMessage.getMensagem().equals("GAME START")){
+			
 			frameMesa = new InterfaceMesa(this, nome);
 			
 			frameMesa.setVisible(true);
+			
+			enviarMsgInterface(new ChatMessage("Server", "Game Start!", 5));
 			
 //			frame = new InterfaceMao(new Carta[]{new Carta(1, 2), new Carta(1, 10), new Carta(1, 5)});
 //			frame.setVisible(true);
@@ -239,6 +243,8 @@ public class Cliente implements Runnable{
 			frameMao.setVisible(true);
 			frameMao.toFront();			
 		}else if(chatMessage.getMensagem().equals("MINHA VEZ")){
+			enviarMsgInterface(new ChatMessage("Server", nome + " ==> Sua Vez!", 5));
+			
 			switch(chatMessage.getValRodada()){
 			case 1:
 				frameMao.getLblTrucar().setText("Trucar?");
@@ -270,6 +276,8 @@ public class Cliente implements Runnable{
 			
 //			frameMao.getBtnJogar().setEnabled(true);
 		}else if(chatMessage.getMensagem().equals("MINHA VEZ ACEITAR")){
+			enviarMsgInterface(new ChatMessage("Server", nome + " ==> Sua Vez!", 5));
+			
 			switch(chatMessage.getValRodada()){
 			case 1:
 				frameMao.getLblTrucar().setText("Trucar?");
@@ -277,7 +285,7 @@ public class Cliente implements Runnable{
 				frameMao.getBtnNao().setVisible(true);				
 				break;
 			case 3:
-				frameMao.getLblTrucar().setText("Aceita\nTruco?");
+				frameMao.getLblTrucar().setText("<html>Aceita Truco?</html>");
 				frameMao.getBtnSim().setVisible(true);
 				frameMao.getBtnNao().setVisible(true);
 				
@@ -310,6 +318,7 @@ public class Cliente implements Runnable{
 			
 //			frameMao.getBtnJogar().setEnabled(true);
 		}else if(chatMessage.getMensagem().equals("MINHA VEZ JOGAR CARTA")){
+			enviarMsgInterface(new ChatMessage("Server", nome + " ==> Sua Vez!", 5));
 			frameMao.getBtnJogar().setEnabled(true);
 		}else if(chatMessage.getMensagem().equals("MINHA VEZ JOGAR CARTA ABERTA FECHADA")){
 //			frameMao.getBtnJogar().setEnabled(true);
@@ -341,6 +350,9 @@ public class Cliente implements Runnable{
 				frameMesa.pintarCarta(chatMessage.getCarta(), jlblAux);
 			}
 		}else if(chatMessage.getMensagem().equals("ENCERRAR JOGADA E LIMPAR MESA")){
+			int grup = (chatMessage.getValRodada()%2)+1;
+			enviarMsgInterface(new ChatMessage("Server", "Grupo " + grup + " Ganhou a Jogada!"+ "\nAguarde...", 5));
+			
 			thread.sleep(5000); //esperar 5seg
 			frameMesa.pintarCarta(null, frameMesa.getLblJogador0()); //zerar mesa
 			frameMesa.pintarCarta(null, frameMesa.getLblJogador1());
@@ -353,15 +365,44 @@ public class Cliente implements Runnable{
 			frameMesa.getLblRodadaG1().setText("00");
 			frameMesa.getLblRodadaG2().setText("00");
 			
-			frameMesa.getLblPlacarG1().setText(chatMessage.getPlacarG1() > 9 ?	//seta numero arrumado: 00, 01... 10 12 12...
-					"" + chatMessage.getPlacarG1() : "0" + chatMessage.getPlacarG1());
-			frameMesa.getLblPlacarG2().setText(chatMessage.getPlacarG2() > 9 ?	//seta numero arrumado: 00, 01... 10 12 12...
-					"" + chatMessage.getPlacarG2() : "0" + chatMessage.getPlacarG2());
+			String s = chatMessage.getPlacarG1() > 9 ?	//seta numero arrumado: 00, 01... 10 12 12...
+					("" + chatMessage.getPlacarG1()) : ("0" + chatMessage.getPlacarG1());
+			frameMesa.getLblPlacarG1().setText(s);
+			
+			s = chatMessage.getPlacarG2() > 9 ?	//seta numero arrumado: 00, 01... 10 12 12...
+					("" + chatMessage.getPlacarG2()) : ("0" + chatMessage.getPlacarG2());
+			frameMesa.getLblPlacarG2().setText(s);
+					
+		}else if(chatMessage.getMensagem().equals("ENCERRAR RODADA")){
+			int grup = chatMessage.getValRodada();
+			enviarMsgInterface(new ChatMessage("Server", "Grupo " + grup + " Ganhou a Rodada!"+ "\nAguarde...", 5));
+		}else if(chatMessage.getMensagem().equals("ENCERRAR JOGO")){
+			int grup1 = chatMessage.getPlacarG1();
+			int grup2 = chatMessage.getPlacarG2();
+			
+			enviarMsgInterface(new ChatMessage("Server", "End Game\n  Placar Final: \nGrupo 1 (" + grup1 + ") X (" + grup2 + ") Grupo 2" + "\nSair...", 5));
+			
+			frameMesa.setDefaultCloseOperation(frameMesa.EXIT_ON_CLOSE);
+			frameMao.setDefaultCloseOperation(frameMao.EXIT_ON_CLOSE);
 		}else{
 			return true;
 		}
 		
 		return false;
+	}
+	
+	public void enviarMsgInterface(ChatMessage chatMessage) throws Exception{
+		if(frameMesa != null){
+//			if(chatMessage.isItsMe()){
+//				frame.getDoc().insertString(frame.getDoc().getLength(), "\n[Me]: " + chatMessage.getMensagem(), frame.getLeftBlue());
+//				frame.getDoc().setParagraphAttributes(frame.getDoc().getLength(), 1, frame.getLeftBlue(), false);	
+//			}else{
+				frameMesa.getDoc().insertString(frameMesa.getDoc().getLength(), "\n[" + chatMessage.getNome() + "]: " + chatMessage.getMensagem(), frameMesa.getLeftBlue());
+				frameMesa.getDoc().setParagraphAttributes(frameMesa.getDoc().getLength(), 1, frameMesa.getLeftBlue(), false);
+//			}
+		}else{
+			throw new Exception("Cliente 'nao operando'"); //frame fechado, encerrar
+		}
 	}
 	
 	public static void main(String[] args) throws Exception{ //auto-"tratar" excecoes / nao tratar
@@ -384,15 +425,15 @@ public class Cliente implements Runnable{
 //		System.out.print("Digite o nome: ");
 //		String nome = scanner.nextLine(); //pegar nome do cliente
 		
-//	    String ip = JOptionPane.showInputDialog("Qual é o ip do servidor?");
-//	    if (nome == null) {	    	
-//	    	System.exit(0);
-//	    }else if(nome.equals("")){
-//	    	JOptionPane.showMessageDialog(null, "IP Invalido");
-//	    	scanner.close();
-//	    	System.exit(0);
-//	    }
-	    String ip = "localhost";
+	    String ip = JOptionPane.showInputDialog("Qual é o ip do servidor?");
+	    if (nome == null) {	    	
+	    	System.exit(0);
+	    }else if(nome.equals("")){
+	    	JOptionPane.showMessageDialog(null, "IP Invalido");
+	    	scanner.close();
+	    	System.exit(0);
+	    }
+//	    String ip = "localhost";
 	    
 		Cliente cliente = new Cliente(ip, 2525, nome); //ip e porta do servidor
 		
