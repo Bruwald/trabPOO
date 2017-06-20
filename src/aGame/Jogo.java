@@ -204,7 +204,7 @@ public class Jogo {
 	public void encerrarJogada() throws Exception{
 		
 		//Incremente o numero da jogada! 
-		rodada.setNroJogada(rodada.getNroJogada() + 1);
+		//rodada.setNroJogada(rodada.getNroJogada() + 1);
 	    for(i = 0; i < 4; i++) jogaram[i] = false;		
 		
 	    ChatMessage chatMessage;
