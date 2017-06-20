@@ -63,7 +63,7 @@ public class InterfaceMesa extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
 //		InterfaceMesa frame = new InterfaceMesa();
 //		frame.setVisible(true);
 //		
@@ -92,7 +92,7 @@ public class InterfaceMesa extends JFrame {
 //				}
 //			}
 //		});
-	}
+//	}
 
 	/**
 	 * Create the frame.

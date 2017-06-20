@@ -47,7 +47,7 @@ public class InterfaceMao extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
 //		InterfaceMesa frame2 = new InterfaceMesa();
 //		frame2.setVisible(true);
 //		
@@ -77,7 +77,7 @@ public class InterfaceMao extends JFrame {
 //				}
 //			}
 //		});
-	}
+//	}
 
 	/**
 	 * Create the frame.
