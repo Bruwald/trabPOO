@@ -493,9 +493,9 @@ public class Cliente implements Runnable{
 //		String nome = scanner.nextLine(); //pegar nome do cliente
 		
 	    String ip = JOptionPane.showInputDialog("Qual é o ip do servidor?");
-	    if (nome == null) {	    	
+	    if (ip == null) {	    	
 	    	System.exit(0);
-	    }else if(nome.equals("")){
+	    }else if(ip.equals("")){
 	    	JOptionPane.showMessageDialog(null, "IP Invalido");
 	    	scanner.close();
 	    	System.exit(0);
