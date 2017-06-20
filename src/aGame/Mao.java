@@ -89,10 +89,6 @@ public class Mao {
 			chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 			servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 			
-///**/		s = "MINHA VEZ"; //minha vez trucar/aumentar
-//			chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
-//			servidor.sendToOne(chatMessage, rodada.getQuemJoga());
-			
 			//Verifica o valor da rodada e vai para o caso especifico, realizando aumento de apostas especificas.
 			switch(rodada.getValorRodada()) {
 				case 1:
@@ -477,6 +473,7 @@ public class Mao {
 						chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
 						servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 						
+						//Mensagem se o jogador deseja pedir 12
 					    System.out.printf("\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)");
 					    s = "\nDESEJA PEDIR 12? (0 - NAO / 1 - SIM)";
 					    
@@ -505,11 +502,13 @@ public class Mao {
 			    		    //Escolha do jogador de jogar a carta aberta ou fechada
 							cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 							
-							
+							//Se a carta for fechada sete o peso dela como -1
 			    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 			    		    
+			    		    //A carta retirada que o jogador quis tirar da mao para retorno
 			    		    Carta carta = cartasNaMao[cartaRetirada];
 			    		    
+			    		    //pinte a mesa com a carta retirada
 			    		    pintarMesa(carta, s, chatMessage, servidor, rodada);
 			    		    
 			    		    return carta;
@@ -521,7 +520,7 @@ public class Mao {
 		    		    //Escolha do jogador de jogar a carta aberta ou fechada
 						cartaFechada = receberCartaFechada(s, chatMessage, servidor, rodada, atendentes);
 						
-						
+						//Se a carta for fechada sete o peso dela como -1
 		    		    if(cartaFechada == 1) cartasNaMao[cartaRetirada].setPeso(-1);
 		    		    
 		    		    Carta carta = cartasNaMao[cartaRetirada];
@@ -532,10 +531,12 @@ public class Mao {
 					}
 					break;
 				case 12:
-/**/				s = "MINHA VEZ"; //minha vez trucar/aumentar
+					//Para mandar para o server MINHA VEZ
+					s = "MINHA VEZ"; //minha vez trucar/aumentar
 					chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga(), rodada.getValorRodada());
 					servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 					
+					//Mensagem que a rodada esta valendo dois
 					System.out.println("\nA rodada esta valendo 12!");
 					s = "\nA rodada esta valendo 12!";
 					
@@ -560,12 +561,29 @@ public class Mao {
 		}
 	}
 	
+	/**
+	 * Funcao que pinta a mesa com as cartas jogadas de cada jogador.
+	 * @param Carta carta -> carta do baralho de cartas
+	 * @param String s -> string s para ver a string a ser jogada no server
+	 * @param ChatMessage chatMessage -> mensagem enviada ao server para administracao do jogo
+	 * @param Servidor servidor -> servidor do jogo do Truco
+	 * @param Rodada rodada -> rodada do truco
+	 */
 	public void pintarMesa(Carta carta, String s, ChatMessage chatMessage, Servidor servidor, Rodada rodada) throws Exception{
 		s = "PINTAR MESA"; //pintar a carta na mesa
 		chatMessage = new ChatMessage("Server", s, rodada.getJogadores()[rodada.getQuemJoga()].getNroJogador(), carta); 
 		servidor.sendToAll(chatMessage, 5);
 	}
 	
+	/**
+	 * Funcao que passa a carta retirada da mao (de 0 a 2).
+	 * @param String s -> string s para ver a string a ser jogada no server
+	 * @param ChatMessage chatMessage -> mensagem enviada ao server para administracao do jogo
+	 * @param Servidor servidor -> servidor do jogo do Truco
+	 * @param Rodada rodada -> rodada do truco 
+	 * @param List <Atendente> atendentes -> lista de atendentes do servidor do truco
+	 * @return inteiro indicando a carta a ser retirada da mao (de 0 a 2)
+	 */
 	public int receberCartaRetirada(String s, ChatMessage chatMessage, Servidor servidor, Rodada rodada, List<Atendente> atendentes) throws Exception{
 		//Escolha de qual carta o jogador deseja jogar.
 		System.out.printf("\nJOGAR CARTA (de 0 a 2): ");
@@ -574,21 +592,27 @@ public class Mao {
 		chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga()); 			
 		servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 		
-/**/	s = "MINHA VEZ JOGAR CARTA"; //minha vez escolher carta
+		//chame MINHA VEZ JGOAR CARTA para o server
+		s = "MINHA VEZ JOGAR CARTA"; 
 		chatMessage = new ChatMessage("Server", s, rodada.getQuemJoga());
 		servidor.sendToOne(chatMessage, rodada.getQuemJoga());
 		
+		//carta retirada eh mandada para o atendente especifico
 		int cartaRetirada = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
-		
-//		s = "PINTAR MESA";
-//		chatMessage = new ChatMessage("Server", s, 5, new Carta(1, 2)); //----------------------
-//		servidor.sendToAll(chatMessage, 5);
-//		
 		
 	    //cartaRetirada = EntradaTeclado.leInt();;
 		return cartaRetirada;
 	}
 	
+	/**
+	 * Funcao que recebe uma carta fechada.
+	 * @param String s -> string s para ver a string a ser jogada no server
+	 * @param ChatMessage chatMessage -> mensagem enviada ao server para administracao do jogo
+	 * @param Servidor servidor -> servidor do jogo do Truco
+	 * @param Rodada rodada -> rodada do truco 
+	 * @param List <Atendente> atendentes -> lista de atendentes do servidor do truco
+	 * @return inteiro indicando se a carta esta aberta ou fechada
+	 */
 	public int receberCartaFechada(String s, ChatMessage chatMessage, Servidor servidor, Rodada rodada, List<Atendente> atendentes) throws Exception{
 		//Escolha do jogador de jogar a carta aberta ou fechada.
 		int cartaFechada = 0;
@@ -611,6 +635,11 @@ public class Mao {
 		return cartaFechada;
 	}
 	
+	/**
+	 * Funcao que pega um objeto para o servidor verificar se esta eh  sim ou nao.
+	 * @param Rodada rodada -> rodada do jogo do truco.
+	 * @return resposta sim ou nao.
+	 */
 	public int responderSimNao(Rodada rodada, List<Atendente> atendentes) throws Exception{
 		int resposta = (int) atendentes.get(rodada.getQuemJoga()).getIn().readObject();
 		

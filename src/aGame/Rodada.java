@@ -17,7 +17,10 @@ public class Rodada {
 	 * int nroJogada -> numero da jogada da rodada (vai de 1 ate 3, ja como utiliza-se melhor de 3)
 	 * int valorRodada -> valor da rodada de acordo com o estado da aposta (3 -> truco, 6, 9, 12)
 	 * int quemJoga -> simboliza um "ponteiro" para qual jogador esta jogando na rodada (de 0 a 3)
-	 * int quemTrucou -> variavel que guarda quem trucou na rodada (de 0 a 3), armazena-se -1 inicialmente (ninguem trucou).
+	 * int quemTrucou -> variavel que guarda quem trucou na rodada (de 0 a 3), armazena-se -1 inicialmente (ninguem trucou)
+	 * int quemPediu6 -> variavel que guarda quem pediu 6 (de 0 a 3), armazena-se -1 inicialmente (ninguem pediu 6)
+	 * int quemPediu9 -> variavel que guarda quem pediu 9 (de 0 a 3), armazena-se -1 inicialmente (ninguem pediu 9)
+	 * int quemPediu12 -> variavel que guarda quem pediu 12 (de 0 a 3), armazena-se -1 inicialmente (ninguem pediu 12)
 	 * int qualJogadorGanhouPrimeiraJogada -> variavel importante que guarda quem ganhou a primeira jogada para verificar criterios de amarros nas
 	 * 										  jogadas seguintes (se amarrou a segunda ou a terceira, ganha quem ganhou a primeira jogada).
 	 * Placar placarRodada -> um placar que armazena os pontos da dupla 1 e da dupla 2 da melhor de 3 da rodada.
