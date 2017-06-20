@@ -12,6 +12,12 @@ import java.net.SocketTimeoutException;
 
 import cliente.ChatMessage;
 
+/**
+ * Classe responsavel pela thread e main do atendente que eh responsavel por
+ * cuidar de um cliente
+ * @author 
+ *
+ */
 public class Atendente implements Runnable{
 	private Servidor servidor; //servidor de origem do atendente
 	private Socket socket; //semelhante ao servidor
@@ -29,6 +35,14 @@ public class Atendente implements Runnable{
 	
 	private int num;
 	
+	/**
+	 * contrutor que recebe o servidor e o socket do cliente e o numero do atendente (em ordem de chegada)
+	 *  e inicializa alguns atributos
+	 * @param servidor
+	 * @param socket
+	 * @param num
+	 * @throws Exception
+	 */
 	public Atendente(Servidor servidor, Socket socket, int num) throws Exception{ //construtor //Receber socket e inicializar alguns atributos
 		this.servidor = servidor;
 		this.socket = socket;
@@ -41,6 +55,11 @@ public class Atendente implements Runnable{
 		this.num = num;
 	}
 	
+	/**
+	 * Funcao responsavel por obter InputStream e OutputStream da conexao e
+	 * inicializa-la	
+	 * @throws Exception
+	 */
 	private void open() throws Exception{ //inicializar
 		try{ //verificar se foi possivel abrir
 //			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -55,6 +74,9 @@ public class Atendente implements Runnable{
 		}
 	}
 	
+	/**
+	 * Funcao responsavel por fechar/desalocar os recursos utilizados/alocados
+	 */
 	private void close(){ //fechar recursos / desalocar
 		if(in != null){ //verificar se foi corretamente aberto
 			try{ //fechar InputStream
@@ -95,11 +117,20 @@ public class Atendente implements Runnable{
 //		out.println(mensagem);
 //	}
 	
+	/**
+	 * Funcao responsavel por repassar mensagem ao cliente
+	 * @param chatMessage
+	 * @throws IOException
+	 */
 	public void send(ChatMessage chatMessage) throws IOException{ //repassar mensagem ao cliente
 		out.writeObject(chatMessage);
 		out.flush();
 	}
 	
+	/**
+	 * Funcao responsavel por criar e iniciar a thread auxiliar e muda para executando. 
+	 * Retorna caso ao atendente nao tenha sido inicializado ou esteja em execucao
+	 */
 	public void start(){ //cria e inicia a thread auxiliar e muda para executando. Retorna caso ao atendente nao tenha sido inicializado ou esteja em execucao
 		if(!inicializado || executando){
 			return;
@@ -110,6 +141,11 @@ public class Atendente implements Runnable{
 		thread.start(); 
 	}
 	
+	/**
+	 * Funcao responsavel por encerrar thread auxiliar adequadamente (e seus recursos) chamando a close()
+	 *  e dando thread.join() (aguardar thread encerrar)
+	 * @throws Exception
+	 */
 	public void stop() throws Exception{ //muda para nao executando, manda encerrar thread auxiliar e espera finalizar
 		executando = false;
 		
@@ -118,6 +154,12 @@ public class Atendente implements Runnable{
 		}
 	}
 	
+	/**
+	 *  Override do metodo run ja existente da interface runnable (thread)
+	 * inicia quando a thread iniciar e roda enquanto a thread estiver executando
+	 * Obs: Como neste caso o servidor esta gerenciando o jogo, apenas mantem a conexao com o cliente
+	 * (no caso de um chat serviria melhor para sua funcao)
+	 */
 	@Override
 	public void run() { //executado por uma thread auxiliar //semelhante ao do servidor
 		while(executando){ //ecoar msg do cliente //atender cliente //enquanto executando
@@ -168,14 +210,26 @@ public class Atendente implements Runnable{
 		close(); //liberar recursos do atendente
 	}
 
+	/**
+	 * Pega numero do Atendente/Cliente
+	 * @return
+	 */
 	public int getNum() {
 		return num;
 	}
 
+	/**
+	 * Pega o ObjectOutputStream
+	 * @return
+	 */
 	public ObjectOutputStream getOut() {
 		return out;
 	}
 
+	/**
+	 * Pega o ObjectInputStream
+	 * @return
+	 */
 	public ObjectInputStream getIn() {
 		return in;
 	}

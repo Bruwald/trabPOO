@@ -21,7 +21,11 @@ import aGame.Carta;
 import bInterface.InterfaceMao;
 import bInterface.InterfaceMesa;
 
-
+/**
+ * Classe responsavel pela thread e main do cliente
+ * @author 
+ *
+ */
 //obs: quando o servidor eh encerrado antes do cliente ele encerra os clientes abertos
 //     assim que o cliente tentar enviar uma mensagem ele eh tambem para
 public class Cliente implements Runnable{ 
@@ -47,6 +51,14 @@ public class Cliente implements Runnable{
 	private InterfaceMesa frameMesa;
 	private InterfaceMao frameMao;
 	
+	/**
+	 * contrutor que recebe uma string endereco, um inteiro porta, e uma string nome
+	 *  e manda inicializar conexao e obter InputStream e OutputStream
+	 * @param endereco
+	 * @param porta
+	 * @param nome
+	 * @throws Exception
+	 */
 	public Cliente(String endereco, int porta, String nome) throws Exception{ //construtor //manda inicializar conexao e obter InputStream e OutputStream
 		inicializado = false;
 		executando = false;
@@ -56,6 +68,13 @@ public class Cliente implements Runnable{
 		open(endereco, porta);
 	}
 	
+	/**
+	 * Funcao que recebe uma string endereco e um int porta e 
+	 * estabelece conexao e obtem InputStream e OutputStream da conexao
+	 * @param endereco
+	 * @param porta
+	 * @throws Exception
+	 */
 	private void open(String endereco, int porta) throws Exception{ //estabelece conexao e obtem InputStream e OutputStream da conexao
 		try{
 			socket = new Socket(endereco, porta);
@@ -75,6 +94,9 @@ public class Cliente implements Runnable{
 		}
 	}
 	
+	/**
+	 * Funcao responsavel por fechar/desalocar os recursos utilizados/alocados
+	 */
 	private void close(){ //fechar/desalocar recursos utilizados/alocados
 		if(in != null){
 			try{
@@ -112,6 +134,9 @@ public class Cliente implements Runnable{
 		thread = null;
 	}
 	
+	/**
+	 * Funcao responsavel por tentar iniciar thread auxilliar
+	 */
 	private void start(){ //tentar iniciar thread auxilliar
 		if(!inicializado || executando){
 			return;
@@ -122,6 +147,11 @@ public class Cliente implements Runnable{
 		thread.start();
 	}
 	
+	/**
+	 * Funcao responsavel por encerrar thread auxiliar adequadamente (e seus recursos) chamando a close()
+	 *  e dando thread.join() (aguardar thread encerrar)
+	 * @throws Exception
+	 */
 	private void stop() throws Exception{ //encerrar thread auxiliar adequadamente (e seus recursos)
 		executando = false;
 		
@@ -130,6 +160,10 @@ public class Cliente implements Runnable{
 		}
 	}
 	
+	/**
+	 * Retorna se a thread ainda esta executando
+	 * @return
+	 */
 	public boolean isExecutando(){
 		return executando;
 	}
@@ -138,11 +172,21 @@ public class Cliente implements Runnable{
 //		out.println(mensagem);
 //	}
 	
+	/**
+	 * Metodo que recebe uma mensagem e permite o envio de mensagens para o servidor
+	 * @param chatMessage
+	 * @throws IOException
+	 */
 	public void send(ChatMessage chatMessage) throws IOException{ //metodo que permite o envio de mensagens para o servidor
 		out.writeObject(chatMessage);
 		out.flush(); //garantir que o envio seja feito corretamente / limpar o cache / ler ate o fim do buffer
 	}
 	
+	/**
+	 * Metodo que recebe um inteiro e permite o envio de mensagens para o servidor
+	 * @param msg
+	 * @throws IOException
+	 */
 	public void sendInt(int msg) throws IOException{ //metodo que permite o envio de mensagens para o servidor
 		out.writeObject(msg);
 		out.flush(); //garantir que o envio seja feito corretamente / limpar o cache / ler ate o fim do buffer
@@ -162,6 +206,11 @@ public class Cliente implements Runnable{
 		frame.pintarCarta(new Carta(1, 10), frame.getLblJogador2());
 		frame.pintarCarta(new Carta(4, 13), frame.getLblJogador3());
 //		
+	 */
+	
+	/**
+	 * Override do metodo run ja existente da interface runnable (thread)
+	 * inicia quando a thread iniciar e roda enquanto a thread estiver executando
 	 */
 	@Override
 	public void run() {
@@ -206,6 +255,13 @@ public class Cliente implements Runnable{
 		close(); //encerrar/desalocar cliente recursos
 	}
 	
+	/**
+	 * Metodo responsavel por receber uma mensagem como sinal de controle e indicar o que deve
+	 * ser feito para o cliente
+	 * @param chatMessage
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean verificarStringSinal(ChatMessage chatMessage) throws Exception{
 		if(chatMessage.getMensagem().equals("GAME START")){
 			
@@ -391,6 +447,12 @@ public class Cliente implements Runnable{
 		return false;
 	}
 	
+	/**
+	 * Metodo responsavel por printar em um JTextPane as mensagens recebidas do servidor
+	 * quando necessario e se possivel
+	 * @param chatMessage
+	 * @throws Exception
+	 */
 	public void enviarMsgInterface(ChatMessage chatMessage) throws Exception{
 		if(frameMesa != null){
 //			if(chatMessage.isItsMe()){
@@ -405,6 +467,11 @@ public class Cliente implements Runnable{
 		}
 	}
 	
+	/**
+	 * Main do cliente, responsavel pela inicializacao do programa no cliente
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception{ //auto-"tratar" excecoes / nao tratar
 		// TODO Auto-generated method stub
 		Scanner scanner = new Scanner(System.in); //para ler da entrada do teclado

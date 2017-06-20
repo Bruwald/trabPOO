@@ -16,6 +16,11 @@ import java.util.Scanner;
 import aGame.Jogo;
 import cliente.ChatMessage;
 
+/**
+ * Classe responsavel por cuidar do servidor e gerenciar o jogo
+ * @author thiago
+ *
+ */
 public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 	private ServerSocket server; // para novas conexoes
 	
@@ -30,6 +35,11 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 	private Jogo jogo;
 	private boolean flagAtendenteProximoaJogar;
 	
+	/**
+	 * Metodo construtor para inicializar novo objeto servidor, recebe a porta de servico do servidor
+	 * @param porta
+	 * @throws Exception
+	 */
 	//caso ocorra algum problema durante a inicializacao, lancar excecao
 	public Servidor(int porta) throws Exception{ //metodo construtor para inicializar novo objeto servidor, recebe a porta de servico do servidor
 		atendentes = new ArrayList<Atendente>(); //inicializar lista de atendentes
@@ -43,12 +53,20 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 		flagAtendenteProximoaJogar = false;
 	}
 	
+	/**
+	 * Inicializar servidor, recebe a porta
+	 * @param porta
+	 * @throws Exception
+	 */
 	private void open(int porta) throws Exception{ //inicializar servidor
 		//cria serverSocket	e marca servidor como inicializado
 		server = new ServerSocket(porta);
 		inicializado = true;
 	}
 	
+	/**
+	 * Fechar e liberar recursos utilizados pelo servidor
+	 */
 	private void close(){ //fecha/libera recursos utilizados pelo servidor
 		for(Atendente atendente : atendentes){ //fechar todos os atendentes abertos/conexoes e seus recursos
 			try{
@@ -90,6 +108,12 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 //		}
 //	}
 	
+	/**
+	 * Reenvia a mensagem recebida a todos os atendentes para repassarem a seus clientes
+	 * @param chatMessage
+	 * @param origm
+	 * @throws Exception
+	 */
 	public void sendToAll(ChatMessage chatMessage, int origm) throws Exception{ //reenvia a mensagem a todos os atendentes
 		Iterator<Atendente> i = atendentes.iterator();
 		
@@ -108,7 +132,13 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 		}
 	}
 	
-	public void sendToOne(ChatMessage chatMessage, int origm) throws Exception{ //reenvia a mensagem a todos os atendentes
+	/**
+	 * Reenvia a mensagem recebida a todos um atendente para repassar a seu cliente
+	 * @param chatMessage
+	 * @param origm
+	 * @throws Exception
+	 */
+	public void sendToOne(ChatMessage chatMessage, int origm) throws Exception{ //reenvia a mensagem a um atendente
 		Iterator<Atendente> i = atendentes.iterator();
 		
 		while(i.hasNext()) {
@@ -126,6 +156,9 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 		}
 	}
 	
+	/**
+	 * Iniciar thread auxiliar do servidor
+	 */
 	public void start(){ //Iniciar thread auxiliar do servidor
 		if(!inicializado || executando){ //caso nao tenha sido iniciado ou esteja executando
 			return;
@@ -137,6 +170,10 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 		
 	}
 	
+	/**
+	 * Metodo responsavel por "encerrar" thread, e "encerrar" recursos utilizados
+	 * @throws Exception
+	 */
 	public void stop() throws Exception{ //"encerrar" thread, e "encerrar" recursos utilizados
 		executando = false;
 		
@@ -145,6 +182,10 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 		}
 	}
 
+	/**
+	 * Override do metodo run ja existente da interface runnable (thread)
+	 * inicia quando a thread iniciar e roda enquanto a thread estiver executando
+	 */
 	@Override
 	public void run() { //da interface Runnable (run executado pela thread auxiliar)
 		System.out.println("Aguardando conexao.");
@@ -164,8 +205,8 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 			
 				
 				atendentes.add(atendente); //guardar uma lista dos atendetes para liberar quando encerra o servidor
-				if(atendentes.size() == 4 && flagJogo){
-					//iniciar jogo
+				if(atendentes.size() == 4 && flagJogo){ //quando o numero de atendentes abertos for 4
+					//iniciar jogo e "bloquear servidor"
 					jogo = new Jogo(this); //passar servidor
 					
 					while(!jogo.getPlacarJogo().alguemGanhou()){
@@ -213,6 +254,11 @@ public class Servidor implements Runnable{ // Para threads p/ novas conexoes
 		
 	}
 	
+	/**
+	 * Main do Servidor, responsavel pela inicializacao do programa no servidor
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception{ //auto-"tratar" excecoes / nao tratar
 		// TODO Auto-generated method stub
 		

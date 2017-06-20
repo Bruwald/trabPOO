@@ -281,40 +281,40 @@ public class InterfaceMesa extends JFrame {
 		txtpnMensagensDoServidor.setEditable(false);		
 		//		contentPane.add(textPane);
 				
-				doc = txtpnMensagensDoServidor.getStyledDocument();
-						
-						lblJogador_0 = new JLabel("Jogador 0");
-						lblJogador_0.setHorizontalAlignment(SwingConstants.CENTER);
-						lblJogador_0.setForeground(Color.WHITE);
-						lblJogador_0.setFont(new Font("Arial Black", Font.PLAIN, 18));
-						lblJogador_0.setBounds(417, 911, 135, 33);
-						contentPane.add(lblJogador_0);
-						
-						lblJogador_1 = new JLabel("Jogador 1");
-						lblJogador_1.setHorizontalAlignment(SwingConstants.CENTER);
-						lblJogador_1.setForeground(Color.WHITE);
-						lblJogador_1.setFont(new Font("Arial Black", Font.PLAIN, 18));
-						lblJogador_1.setBounds(1129, 333, 135, 33);
-						contentPane.add(lblJogador_1);
-						
-						lblJogador_2 = new JLabel("Jogador 2");
-						lblJogador_2.setHorizontalAlignment(SwingConstants.CENTER);
-						lblJogador_2.setForeground(Color.WHITE);
-						lblJogador_2.setFont(new Font("Arial Black", Font.PLAIN, 18));
-						lblJogador_2.setBounds(433, 11, 135, 33);
-						contentPane.add(lblJogador_2);
-						
-						lblJogador_3 = new JLabel("Jogador 3");
-						lblJogador_3.setHorizontalAlignment(SwingConstants.CENTER);
-						lblJogador_3.setForeground(Color.WHITE);
-						lblJogador_3.setFont(new Font("Arial Black", Font.PLAIN, 18));
-						lblJogador_3.setBounds(10, 333, 135, 33);
-						contentPane.add(lblJogador_3);
+		doc = txtpnMensagensDoServidor.getStyledDocument();
 				
-						JScrollPane scrollPane = new JScrollPane(txtpnMensagensDoServidor);
-						scrollPane.setBounds(959, 664, 300, 280);
-						//		scrollPane.setViewportView(txtPane);
-								contentPane.add(scrollPane);
+		lblJogador_0 = new JLabel("Jogador 0");
+		lblJogador_0.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJogador_0.setForeground(Color.WHITE);
+		lblJogador_0.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblJogador_0.setBounds(417, 911, 135, 33);
+		contentPane.add(lblJogador_0);
+		
+		lblJogador_1 = new JLabel("Jogador 1");
+		lblJogador_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJogador_1.setForeground(Color.WHITE);
+		lblJogador_1.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblJogador_1.setBounds(1129, 333, 135, 33);
+		contentPane.add(lblJogador_1);
+		
+		lblJogador_2 = new JLabel("Jogador 2");
+		lblJogador_2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJogador_2.setForeground(Color.WHITE);
+		lblJogador_2.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblJogador_2.setBounds(433, 11, 135, 33);
+		contentPane.add(lblJogador_2);
+		
+		lblJogador_3 = new JLabel("Jogador 3");
+		lblJogador_3.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJogador_3.setForeground(Color.WHITE);
+		lblJogador_3.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblJogador_3.setBounds(10, 333, 135, 33);
+		contentPane.add(lblJogador_3);
+
+		JScrollPane scrollPane = new JScrollPane(txtpnMensagensDoServidor);
+		scrollPane.setBounds(959, 664, 300, 280);
+		//		scrollPane.setViewportView(txtPane);
+				contentPane.add(scrollPane);
         
 	    
 		jbackground = new JLabel(imageIcon);
