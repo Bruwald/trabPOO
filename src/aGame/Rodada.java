@@ -156,15 +156,27 @@ public class Rodada {
 			//Incremente os pontos da dupla 1 do placar e a jogada.
 			placarRodada.incrementarPontosDupla1(1);
 			nroJogada++;
-			if(maiorCartaDupla1 == cartasJogadas[0]) return 0;
-			else return 2;
+			if(maiorCartaDupla1 == cartasJogadas[0]){
+				qualJogadorGanhouPrimeiraJogada = 0;
+				return 0;
+			}
+			else {
+				qualJogadorGanhouPrimeiraJogada = 2;
+				return 2;
+			}
 		} else if(maiorCartaDupla1.getPeso() < maiorCartaDupla2.getPeso()) {
 			if(nroJogada == 1) qualJogadorGanhouPrimeiraJogada = 2; //dupla 2.
 			//Incremente os pontos da dupla 1 do placar e a jogada.
 			placarRodada.incrementarPontosDupla2(1);
 			nroJogada++;
-			if(maiorCartaDupla2 == cartasJogadas[1]) return 1;
-			else return 3;
+			if(maiorCartaDupla2 == cartasJogadas[1]) {
+				qualJogadorGanhouPrimeiraJogada = 1;
+				return 1;
+			}
+			else {
+				qualJogadorGanhouPrimeiraJogada = 3;
+				return 3;
+			}
 		}
 		
 		return -1;
@@ -181,7 +193,7 @@ public class Rodada {
 		//Se amarrou as 3 jogadas, retorne -1 (ninguem ganhou -> chance infima de acontecer)
 		if(amarrouJogada1 && amarrouJogada2 && amarrouJogada3) return -1;
 		//Se nao amarrou nenhuma jogada, chame a funcao que verifica quem ganhou da classe placar e retorne-a.
-		return placarRodada.quemGanhou();
+		return placarRodada.quemGanhou()-1;
 		
 	}
 	

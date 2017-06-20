@@ -247,7 +247,8 @@ public class Jogo {
 	 */
 	public void encerrarRodada(Servidor servidor) throws Exception{
 		//Retorne quem ganhou a rodada e imprima quem ganhou.
-		duplaQueGanhouARodada = rodada.quemGanhouRodada();
+		duplaQueGanhouARodada = (rodada.quemGanhouRodada()%2) + 1;
+		
 		System.out.println("A Dupla " + duplaQueGanhouARodada + " ganhou a rodada!\n==========================================");
 		
 		//Para enviar a todos os clientes do servidor que dupla ganhou a rodada
