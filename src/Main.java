@@ -55,13 +55,13 @@ public class Main {
 			//Inicia uma nova rodada de acordo com os jogadores e a manilha da rodada
 			Rodada rodada = new Rodada(jogadores, manilha);
 			
+			//Se a rodada for a primeira, pegue quem comeca a jogada como o jogador 0. Apos a rodada 1, quem comeca a rodada = 
+			//quem ganhou a rodada anterior.
+			if(nroRodada == 1) quemComecouJogada = rodada.getQuemJoga();
+			else rodada.setQuemJoga(quemGanhouUltimaRodada);
+			
 			//Enquanto ninguem ganhou a rodada, entre no loop...
 			while(!rodada.getPlacarRodada().alguemGanhou()){
-				
-				//Se a rodada for a primeira, pegue quem comeca a jogada como o jogador 0. Apos a rodada 1, quem comeca a rodada = 
-				//quem ganhou a rodada anterior.
-				if(nroRodada == 1) quemComecouJogada = rodada.getQuemJoga();
-				else rodada.setQuemJoga(quemGanhouUltimaRodada);
 				
 				//Enquanto todos nao jogaram
 				while(quantosJogaram < 4) {
